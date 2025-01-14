@@ -1,0 +1,88 @@
+services:
+  # 数据库
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    networks:
+      # 加入网络
+      - thrive_network
+    environment:
+      # 数据库密码
+      MYSQL_ROOT_PASSWORD: yyds
+      # 创建数据库
+      MYSQL_DATABASE: ThriveX
+    volumes:
+      # 映射到宿主机指定目录
+      - ./mysql/mysql_data:/var/lib/mysql
+      # 执行当前目录data中的sql脚本（只在初始化时执行）
+      - ./mysql/data:/docker-entrypoint-initdb.d
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  # 备份服务
+  backup:
+    image: mysql:8.0
+    container_name: mysql_backup
+    # 每3小时自动备份数据
+    command: /bin/sh -c "while true; do mysqldump -h mysql -u root -pliuyuyang ThriveX > /backup/ThriveX_$(date +%F_%T).sql; sleep 10800; done"
+    # 将容器中的目录映射到当前目录
+    volumes:
+      - ./mysql/backup:/backup
+    networks:
+      - thrive_network
+    depends_on:
+      - mysql
+
+  # 前端项目
+  blog:
+    container_name: blog
+    build: ./program/blog
+    ports:
+      - "9001:9001"
+    networks:
+      - thrive_network
+    depends_on:
+      - mysql
+      - server
+
+  # 控制端项目
+  admin:
+    container_name: admin
+    build: ./program/admin
+    ports:
+      - "9002:9002"
+    networks:
+      - thrive_network
+    depends_on:
+      - mysql
+      - server
+
+  # 后端项目
+  server:
+    container_name: server
+    build: ./program/server
+    ports:
+      - "9003:9003"
+    networks:
+      - thrive_network
+    depends_on:
+      - mysql
+
+  # 服务器
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - thrive_network
+    depends_on:
+      - server
+
+# 网络配置
+networks:
+  # 创建网络
+  thrive_network:
