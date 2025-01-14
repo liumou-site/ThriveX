@@ -1,6 +1,6 @@
 # ThriveX
 
-部署教程
+一键部署教程
 
 第一步、拉取代码：
 git clone https://github.com/LiuYuYang01/ThriveX.git

@@ -51,7 +51,7 @@ services:
     container_name: admin
     build: ./program/admin
     ports:
-      - "9002:9002"
+      - "9002:80"
     networks:
       - thrive_network
     depends_on:
