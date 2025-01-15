@@ -3,20 +3,23 @@ services:
   mysql:
     container_name: mysql
     image: mysql:8.0
+    hostname: mysql-thrive
     ports:
       - "3307:3306"
     networks:
-      # 加入网络
-      - thrive_network
+      thrive_network:
+        ipv4_address: 172.17.178.10
     environment:
-      # 数据库密码
-      MYSQL_ROOT_PASSWORD: yyds
-      # 创建数据库
-      MYSQL_DATABASE: ThriveX
+      ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)
+      MYSQL_ROOT_PASSWORD: ThriveX@123?
+      ## 设置数据库名,强烈建议修改(首次启动有效)
+      MYSQL_DATABASE: thrive
+      ## 设置数据库用户名,强烈建议修改(首次启动有效)
+      MYSQL_USER: thrive
+      ## 设置数据库密码,强烈建议修改(首次启动有效)
+      MYSQL_PASSWORD: ThriveX@123?
     volumes:
-      # 映射到宿主机指定目录
       - ./mysql/mysql_data:/var/lib/mysql
-      # 执行当前目录data中的sql脚本（只在初始化时执行）
       - ./mysql/data:/docker-entrypoint-initdb.d
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
@@ -24,13 +27,22 @@ services:
   backup:
     image: mysql:8.0
     container_name: mysql_backup
-    # 每3小时自动备份数据
-    command: /bin/sh -c "while true; do mysqldump -h mysql -u root -pliuyuyang ThriveX > /backup/ThriveX_$(date +%F_%T).sql; sleep 10800; done"
-    # 将容器中的目录映射到当前目录
+    hostname: mysql_backup-thrive
+    command: /bin/sh -c "while true; do mysqldump -h mysql -u root -pliuyuyang thrive > /backup/thrive_$(date +%F_%T).sql; sleep 10800; done"
     volumes:
       - ./mysql/backup:/backup
     networks:
-      - thrive_network
+      thrive_network:
+        ipv4_address: 172.17.178.11
+    environment:
+      ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
+      MYSQL_ROOT_PASSWORD: ThriveX@123?
+      ## 设置数据库名,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
+      MYSQL_DATABASE: thrive
+      ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
+      MYSQL_USER: thrive
+      ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
+      MYSQL_PASSWORD: ThriveX@123?
     depends_on:
       - mysql
 
@@ -38,10 +50,19 @@ services:
   blog:
     container_name: blog
     build: ./program/blog
+    hostname: blog-thrive
     ports:
       - "9001:9001"
     networks:
-      - thrive_network
+      thrive_network:
+        ipv4_address: 172.17.178.12
+    environment:
+      # 设置后端接口地址,http://你的后端域名/api
+      NEXT_PUBLIC_PROJECT_API: http://server-thrive:9003/api
+      # 高德地图key
+      NEXT_PUBLIC_GAODE_KEY_CODE: ""
+      # 高德地图秘钥
+      NEXT_PUBLIC_GAODE_SECURITYJS_CODE: ""
     depends_on:
       - mysql
       - server
@@ -50,10 +71,23 @@ services:
   admin:
     container_name: admin
     build: ./program/admin
+    hostname: admin-thrive
     ports:
       - "9002:80"
     networks:
-      - thrive_network
+      thrive_network:
+        ipv4_address: 172.17.178.13
+    environment:
+      # 设置后端接口地址,http://你的后端域名/api
+      VITE_PROJECT_API: http://server-thrive:9003/api
+      # 百度统计站点ID
+      VITE_BAIDU_TONGJI_SITE_ID: ""
+      # 百度统计秘钥
+      VITE_BAIDU_TONGJI_ACCESS_TOKEN: ""
+      ## AI大模型秘钥
+      VITE_AI_APIPassword: ""
+      ## 高德地图坐标秘钥
+      VITE_GAODE_WEB_API: ""
     depends_on:
       - mysql
       - server
@@ -62,10 +96,31 @@ services:
   server:
     container_name: server
     build: ./program/server
+    hostname: server-thrive
     ports:
       - "9003:9003"
     networks:
-      - thrive_network
+      thrive_network:
+        ipv4_address: 172.17.178.14
+    environment:
+      ## 设置数据库主机地址
+      DB_HOST: mysql-thrive
+      ## 设置数据库名,强烈建议修改(首次启动有效)-必须和前面的数据库名一致
+      DB_NAME: thrive
+      ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
+      DB_USERNAME: thrive
+      ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
+      DB_PASSWORD: ThriveX@123?
+      ## 设置数据库端口
+      DB_PORT: 3306
+      ## 设置邮箱配置
+      EMAIL_HOST: smtp.qq.com
+      ## 设置邮箱端口
+      EMAIL_PORT: 465
+      ## 设置邮箱用户名
+      EMAIL_USERNAME: 123456789@qq.com
+      ## 设置邮箱密码
+      EMAIL_PASSWORD: 123456789
     depends_on:
       - mysql
 
@@ -73,16 +128,21 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
+    hostname: nginx-thrive
     ports:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
-      - thrive_network
+      thrive_network:
+        ipv4_address: 172.17.178.15
     depends_on:
       - server
 
 # 网络配置
 networks:
-  # 创建网络
   thrive_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.17.178.0/24
