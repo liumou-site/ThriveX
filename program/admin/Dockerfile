@@ -2,7 +2,7 @@
 FROM node:20-alpine AS builder
 
 # 更新包列表并安装Git
-RUN apk add --no-cache git
+RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
 
 # 克隆代码
 RUN git clone https://gitee.com/liu_yu_yang666/ThriveX-Admin.git /thrive
