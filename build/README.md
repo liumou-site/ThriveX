@@ -17,6 +17,7 @@ cd ThriveX
 ```shell
 vim docker-compose.yaml
 ```
+
 ```yaml
 services:
   # 数据库
@@ -69,7 +70,7 @@ services:
   # 前端项目
   blog:
     container_name: blog
-    build: ./program/blog
+    build: ../program/blog
     hostname: blog-thrive
     ports:
       - "9001:9001"
@@ -90,7 +91,7 @@ services:
   # 控制端项目
   admin:
     container_name: admin
-    build: ./program/admin
+    build: ../program/admin
     hostname: admin-thrive
     ports:
       - "9002:80"
@@ -115,7 +116,7 @@ services:
   # 后端项目
   server:
     container_name: server
-    build: ./program/server
+    build: ../program/server
     hostname: server-thrive
     ports:
       - "9003:9003"

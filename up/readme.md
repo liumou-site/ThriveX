@@ -12,7 +12,7 @@ cd ThriveX/up
 ```
 ## 配置环境变量
 
-编辑文件`up/docker-compose.yaml`
+编辑文件`docker-compose.yaml`
 
 ```shell
 vim docker-compose.yaml
