@@ -1,8 +1,7 @@
 # 使用官方的Node.js镜像作为基础镜像
 FROM node:20-alpine AS builder
-
 # 更新包列表并安装Git
-RUN apk add --no-cache git
+RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
 
 # 克隆代码
 RUN git clone https://gitee.com/liu_yu_yang666/ThriveX-Blog.git /thrive
@@ -10,8 +9,6 @@ RUN git clone https://gitee.com/liu_yu_yang666/ThriveX-Blog.git /thrive
 # 设置工作目录
 WORKDIR /thrive
 
-# 复制package.json和package-lock.json
-COPY package*.json .
 
 # 配置 npm 镜像源
 RUN npm config set registry https://registry.npmmirror.com
