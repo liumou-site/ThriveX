@@ -2,7 +2,7 @@ services:
   # 数据库
   mysql:
     container_name: mysql
-    image: registry.cn-hangzhou.aliyuncs.com/liuyi778/mysql:8.0
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql
     hostname: mysql-thrive
     ports:
       - "3307:3306"
@@ -18,8 +18,8 @@ services:
       MYSQL_USER: thrive
       ## 设置数据库密码,强烈建议修改(首次启动有效)
       MYSQL_PASSWORD: ThriveX@123?
-#    volumes:
-#      - ./mysql_data:/var/lib/mysql
+    volumes:
+      - ./mysql_data:/var/lib/mysql
 #      - ./data:/docker-entrypoint-initdb.d
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
