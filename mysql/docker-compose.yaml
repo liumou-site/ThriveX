@@ -104,13 +104,11 @@ services:
 
   # 服务器
   nginx:
-    image: registry.cn-hangzhou.aliyuncs.com/liuyi778/nginx
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/nginx
     container_name: nginx
     hostname: nginx-thrive
     ports:
       - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
       thrive_network:
         ipv4_address: 10.178.178.15
