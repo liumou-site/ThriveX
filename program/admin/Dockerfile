@@ -10,9 +10,6 @@ RUN git clone https://gitee.com/liu_yu_yang666/ThriveX-Admin.git /thrive
 # 设置工作目录
 WORKDIR /thrive
 
-# 复制 package.json 和 package-lock.json
-COPY package*.json ./
-
 # 配置 npm 镜像源
 RUN npm config set registry https://registry.npmmirror.com
 
