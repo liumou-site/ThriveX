@@ -1,0 +1,95 @@
+services:
+  # 前端项目
+  blog:
+    container_name: blog
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/blog
+    hostname: blog-thrive
+    ports:
+      - "9001:9001"
+    networks:
+      thrive_network:
+        ipv4_address: 10.178.178.12
+    environment:
+      # 设置后端接口地址,http://你的后端域名/api
+      NEXT_PUBLIC_PROJECT_API: http://server-thrive:9003/api
+      # 高德地图key
+      NEXT_PUBLIC_GAODE_KEY_CODE: ""
+      # 高德地图秘钥
+      NEXT_PUBLIC_GAODE_SECURITYJS_CODE: ""
+    depends_on:
+      - server
+
+  # 控制端项目
+  admin:
+    container_name: admin
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/admin:latest
+    hostname: admin-thrive
+    ports:
+      - "9002:80"
+    networks:
+      thrive_network:
+        ipv4_address: 10.178.178.13
+    environment:
+      # 设置后端接口地址,http://你的后端域名/api
+      VITE_PROJECT_API: http://server-thrive:9003/api
+      # 百度统计站点ID
+      VITE_BAIDU_TONGJI_SITE_ID: ""
+      # 百度统计秘钥
+      VITE_BAIDU_TONGJI_ACCESS_TOKEN: ""
+      ## AI大模型秘钥
+      VITE_AI_APIPassword: ""
+      ## 高德地图坐标秘钥
+      VITE_GAODE_WEB_API: ""
+    depends_on:
+      - server
+
+  # 后端项目
+  server:
+    container_name: server
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/server
+    hostname: server-thrive
+    ports:
+      - "9003:9003"
+    networks:
+      thrive_network:
+        ipv4_address: 10.178.178.14
+    environment:
+      ## 设置数据库主机地址
+      DB_HOST: 10.178.178.10
+      ## 设置数据库名,强烈建议修改(首次启动有效)-必须和前面的数据库名一致
+      DB_NAME: thrive
+      ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
+      DB_USERNAME: thrive
+      ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
+      DB_PASSWORD: ThriveX@123?
+      ## 设置数据库端口
+      DB_PORT: 3306
+      ## 设置邮箱配置
+      EMAIL_HOST: smtp.qq.com
+      ## 设置邮箱端口
+      EMAIL_PORT: 465
+      ## 设置邮箱用户名
+      EMAIL_USERNAME: 123456789@qq.com
+      ## 设置邮箱密码
+      EMAIL_PASSWORD: 123456789
+
+  # 服务器
+  nginx:
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/nginx
+    container_name: nginx
+    hostname: nginx-thrive
+    ports:
+      - "80:80"
+    networks:
+      thrive_network:
+        ipv4_address: 10.178.178.15
+    depends_on:
+      - server
+
+# 网络配置
+networks:
+  thrive_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.178.178.0/24

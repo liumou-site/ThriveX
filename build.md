@@ -12,11 +12,13 @@ git clone https://github.com/LiuYuYang01/ThriveX.git
 cd ThriveX
 ```
 ## 配置环境变量
-编辑文件`compose.yaml`
+
+编辑文件`up/docker-compose-build.yaml`
 
 ```shell
-vim compose.yaml
+vim up/docker-compose-build.yaml
 ```
+
 ```yaml
 services:
   # 数据库
@@ -28,7 +30,7 @@ services:
       - "3307:3306"
     networks:
       thrive_network:
-        ipv4_address: 172.17.178.10
+        ipv4_address: 172.178.178.10
     environment:
       ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)
       MYSQL_ROOT_PASSWORD: ThriveX@123?
@@ -53,7 +55,7 @@ services:
       - ./mysql/backup:/backup
     networks:
       thrive_network:
-        ipv4_address: 172.17.178.11
+        ipv4_address: 172.178.178.11
     environment:
       ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
       MYSQL_ROOT_PASSWORD: ThriveX@123?
@@ -69,13 +71,13 @@ services:
   # 前端项目
   blog:
     container_name: blog
-    build: ./program/blog
+    build: program/blog
     hostname: blog-thrive
     ports:
       - "9001:9001"
     networks:
       thrive_network:
-        ipv4_address: 172.17.178.12
+        ipv4_address: 172.178.178.12
     environment:
       # 设置后端接口地址,http://你的后端域名/api
       NEXT_PUBLIC_PROJECT_API: http://server-thrive:9003/api
@@ -90,13 +92,13 @@ services:
   # 控制端项目
   admin:
     container_name: admin
-    build: ./program/admin
+    build: program/admin
     hostname: admin-thrive
     ports:
       - "9002:80"
     networks:
       thrive_network:
-        ipv4_address: 172.17.178.13
+        ipv4_address: 172.178.178.13
     environment:
       # 设置后端接口地址,http://你的后端域名/api
       VITE_PROJECT_API: http://server-thrive:9003/api
@@ -115,13 +117,13 @@ services:
   # 后端项目
   server:
     container_name: server
-    build: ./program/server
+    build: program/server
     hostname: server-thrive
     ports:
       - "9003:9003"
     networks:
       thrive_network:
-        ipv4_address: 172.17.178.14
+        ipv4_address: 172.178.178.14
     environment:
       ## 设置数据库主机地址
       DB_HOST: mysql-thrive
@@ -155,7 +157,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
       thrive_network:
-        ipv4_address: 172.17.178.15
+        ipv4_address: 172.178.178.15
     depends_on:
       - server
 
@@ -165,7 +167,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.17.178.0/24
+        - subnet: 172.178.178.0/24
 ```
 
 > 根据备注信息完成编辑即可开始构建
@@ -207,5 +209,5 @@ networks:
 
 ## 执行命令
 ```shell
-docker compose -p thrive up -d --build
+docker-compose -p thrive up -d --build -f up/docker-compose-build.yaml
 ```
