@@ -13,10 +13,10 @@ cd ThriveX
 ```
 ## 配置环境变量
 
-编辑文件`docker-compose.yaml`
+编辑文件`up/docker-compose-build.yaml`
 
 ```shell
-vim docker-compose.yaml
+vim up/docker-compose-build.yaml
 ```
 
 ```yaml
@@ -209,5 +209,5 @@ networks:
 
 ## 执行命令
 ```shell
-docker-compose -p thrive up -d --build
+docker-compose -p thrive up -d --build -f up/docker-compose-build.yaml
 ```

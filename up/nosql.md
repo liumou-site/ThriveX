@@ -8,14 +8,14 @@ git clone https://github.com/LiuYuYang01/ThriveX.git
 
 ## 进入项目
 ```shell
-cd ThriveX/up
+cd ThriveX/
 ```
 ## 配置环境变量
 
-编辑文件`docker-compose.yaml`
+编辑文件`up/docker-compose-nosql.yaml`
 
 ```shell
-vim docker-compose.yaml
+vim up/docker-compose-nosql.yaml
 ```
 
 
@@ -57,5 +57,5 @@ vim docker-compose.yaml
 # 启动
 
 ```shell
-docker-compose up -d
+docker-compose up -d -f up/docker-compose-nosql.yaml
 ```
