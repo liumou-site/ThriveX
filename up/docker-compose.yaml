@@ -1,29 +1,4 @@
 services:
-  # 数据库
-  mysql:
-    container_name: mysql
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql
-    hostname: mysql-thrive
-    ports:
-      - "3307:3306"
-    networks:
-      thrive_network:
-        ipv4_address: 10.178.178.10
-    environment:
-      ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)
-      MYSQL_ROOT_PASSWORD: ThriveX@123?
-      ## 设置数据库名,强烈建议修改(首次启动有效)
-      MYSQL_DATABASE: thrive
-      ## 设置数据库用户名,强烈建议修改(首次启动有效)
-      MYSQL_USER: thrive
-      ## 设置数据库密码,强烈建议修改(首次启动有效)
-      MYSQL_PASSWORD: ThriveX@123?
-    volumes:
-      - ./mysql_data:/var/lib/mysql
-#      - ./data:/docker-entrypoint-initdb.d
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-
-
   # 前端项目
   blog:
     container_name: blog
@@ -42,7 +17,6 @@ services:
       # 高德地图秘钥
       NEXT_PUBLIC_GAODE_SECURITYJS_CODE: ""
     depends_on:
-      - mysql
       - server
 
   # 控制端项目
@@ -67,7 +41,6 @@ services:
       ## 高德地图坐标秘钥
       VITE_GAODE_WEB_API: ""
     depends_on:
-      - mysql
       - server
 
   # 后端项目
@@ -99,8 +72,6 @@ services:
       EMAIL_USERNAME: 123456789@qq.com
       ## 设置邮箱密码
       EMAIL_PASSWORD: 123456789
-    depends_on:
-      - mysql
 
   # 服务器
   nginx:

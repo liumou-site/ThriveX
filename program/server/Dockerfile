@@ -1,5 +1,5 @@
 # 设置基础镜像
-FROM openjdk:11.0-jre-buster
+FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/openjdk:11.0-jre-buster
 
 # 设置工作目录
 WORKDIR /thrive
@@ -9,7 +9,7 @@ ENV PORT=9003
 ## 设置数据库端口
 ENV DB_PORT=3306
 ## 设置数据库主机
-ENV DB_HOST=172.17.178.10
+ENV DB_HOST=172.178.178.10
 ## 设置数据库名
 ENV DB_NAME=ThriveX
 ## 拼接数据库连接信息
