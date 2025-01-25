@@ -14,8 +14,6 @@ fi
 pushd program/admin
 
 docker buildx build --load -t registry.cn-hangzhou.aliyuncs.com/thrive/admin:latest .
-# 使用普通构建,不使用 buildx
-#docker build -t registry.cn-hangzhou.aliyuncs.com/thrive/admin:latest .
 if [ $? -eq 0 ]; then
     docker push registry.cn-hangzhou.aliyuncs.com/thrive/admin:latest
 fi
