@@ -8,6 +8,8 @@ COPY conf.d/index.conf /etc/nginx/conf.d/default.conf
 COPY conf.d/admin.conf /etc/nginx/conf.d/admin.conf
 COPY conf.d/api.conf /etc/nginx/conf.d/api.conf
 COPY conf.d/proxy_headers.conf /etc/nginx/proxy_headers.conf
+# 添加 404 页面
+COPY 404.html /usr/share/nginx/html/404.html
 # 端口
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
