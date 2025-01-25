@@ -1,6 +1,20 @@
 # ThriveX
 
-# 部署教程
+# 部署教程-一键
+
+## github-全球
+```shell
+git clone https://github.com/ThriveX/ThriveX.git&&cd ThriveX/&&bash install.sh
+```
+
+## gitee-国内推荐
+
+```shell
+git clone https://gitee.com/liumou_site/ThriveX.git&&cd ThriveX/&&bash install.sh
+```
+
+
+# 部署教程-手动
 
 ## 使用外部数据库
 
