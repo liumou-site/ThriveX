@@ -1,5 +1,24 @@
 # ThriveX
 
+
+# 依赖安装
+
+> 在进行部署前,请确保服务器已安装`docker`和`docker-compose`、`git`、`docker-compose-plugin`
+
+## YUM
+
+```shell
+yum clean all&&yum makecache &&yum install docker docker-compose git docker-compose-plugin -y
+```
+
+## APT
+
+```shell
+apt update && apt install docker docker-compose git docker-compose-plugin -y
+```
+
+> 请使用`root`用户执行以上命令
+
 # 部署教程-一键
 
 ## github-全球
@@ -16,6 +35,24 @@ git clone https://gitee.com/liumou_site/ThriveX.git&&cd ThriveX/&&bash install.s
 
 # 部署教程-手动
 
+## 依赖安装
+
+> 在进行部署前,请确保服务器已安装`docker`和`docker-compose`、`git`、`docker-compose-plugin`
+
+### YUM
+
+```shell
+yum clean all&&yum makecache &&yum install docker docker-compose git docker-compose-plugin -y
+```
+
+### APT
+
+```shell
+apt update && apt install docker docker-compose git docker-compose-plugin -y
+```
+
+> 请使用`root`用户执行以上命令
+
 ## 使用外部数据库
 
 [文档: 我有自己的数据库](up/nosql.md)
@@ -28,8 +65,6 @@ git clone https://gitee.com/liumou_site/ThriveX.git&&cd ThriveX/&&bash install.s
 
 
 [文档: 使用全新的数据库服务](up/sql.md)
-
-
 
 
 ## 使用本地构建所有镜像
