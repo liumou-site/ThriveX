@@ -9,7 +9,6 @@ ENV MYSQL_ALLOW_EMPTY_PASSWORD=yes
 COPY data/ThriveX.sql /
 # 启动数据库服务
 RUN mysqld &
-RUN mysqld --init-file=/ThriveX.sql
 RUN mysql -u root -e "CREATE DATABASE ThriveX CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
 RUN mysql ThriveX < /ThriveX.sql
 RUN mysql -u root -e "GRANT ALL PRIVILEGES ON ThriveX.* TO 'root'@'%';"
