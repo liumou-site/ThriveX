@@ -29,27 +29,11 @@ git clone https://github.com/ThriveX/ThriveX.git&&cd ThriveX/&&bash install.sh
 ## gitee-国内推荐
 
 ```shell
-git clone https://gitee.com/liumou_site/ThriveX.git&&cd ThriveX/&&bash install.sh
+git clone https://gitee.com/liumou_site/ThriveX.git&&cd ThriveX/&&bash install.sh gitee
 ```
 
 
 # 部署教程-手动
-
-## 依赖安装
-
-> 在进行部署前,请确保服务器已安装`docker`和`docker-compose`、`git`、`docker-compose-plugin`
-
-### YUM
-
-```shell
-yum clean all&&yum makecache &&yum install docker docker-compose git docker-compose-plugin -y
-```
-
-### APT
-
-```shell
-apt update && apt install docker docker-compose git docker-compose-plugin -y
-```
 
 > 请使用`root`用户执行以上命令
 

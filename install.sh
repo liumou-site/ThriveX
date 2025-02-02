@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 set -e
-if [ ! -d "program/admin" ]; then
-		echo "找不到 program/admin 目录"
-		exit 1
-fi
 # 预定义变量
 mysqlPath="/data/ThriveX/mysql"
 mysqlUser="ThriveX"
@@ -17,7 +13,22 @@ mysqlPort="3306"
 # 功能变量
 InstallSetSQL="1"
 nginxPath="/data/ThriveX/nginx"
-
+#
+pac="apt"
+# 设置URL
+url_compose_root="https://github.com/liumou-site/ThriveX/blob/main"
+if [[ $1 == "gitee" ]];then
+    url_compose_root="https://gitee.com/liumou_site/ThriveX/raw/main"
+fi
+compose_filename="docker-compose.yaml"
+function downloadComposeFile() {
+    wget -O docker-compose.yaml "${url_compose_root}/up/${compose_filename}"
+    if [ $? -ne 0 ]; then
+        echo "下载失败,请手动下载"
+        echo "${url_compose_root}/up/${compose_filename}"
+        exit 1
+    fi
+}
 
 function SetMySQLPassword() {
 		while true; do
@@ -113,56 +124,100 @@ function replaceConfig() {
 function InstallNoSQL() {
 	SetInstallInfo
 	Show
-	if [[ -f "up/docker-compose-nosql.yaml" ]];then
-		echo "开始安装NoSQL"
-		cp -rf up/docker-compose-nosql.yaml docker-compose.yaml
-		replaceConfig
-		docker-compose up -d
-		if [ $? -eq 0 ]; then
-				echo "安装成功"
-				echo -e "访问地址: http://127.0.0.1:{$nginxPort}"
-				echo "数据库地址: $mysqlHost:$mysqlPort"
-				echo "数据库用户名: $mysqlUser"
-				echo "数据库密码: $mysqlPassword"
-				echo "数据库映射路径: $mysqlPath"
-				echo "数据库映射路径: $mysql"
-		else
-			echo "找不到NoSQL安装文件"
-			exit 1
-		fi
-	fi
-
+	compose_filename="docker-compose-nosql.yaml"
+	downloadComposeFile
+  echo "开始安装NoSQL"
+  replaceConfig
+  docker-compose up -d
+  if [ $? -eq 0 ]; then
+      echo "安装成功"
+      echo -e "访问地址: http://127.0.0.1:{$nginxPort}"
+      echo "数据库地址: $mysqlHost:$mysqlPort"
+      echo "数据库用户名: $mysqlUser"
+      echo "数据库密码: $mysqlPassword"
+      echo "数据库映射路径: $mysqlPath"
+      echo "数据库映射路径: $mysql"
+  else
+    echo "找不到NoSQL安装文件"
+    exit 1
+  fi
 }
 
 function InstallSQL() {
-	SetInstallInfo
-	Show
-	if [[ -f "up/docker-compose-sql.yaml" ]];then
-			echo "开始安装SQL"
-			cp -rf up/docker-compose-sql.yaml docker-compose.yaml
-			replaceConfig
-			docker-compose up -d
-			if [ $? -eq 0 ]; then
-					echo "安装成功"
-					echo -e "访问地址: http://127.0.0.1:{$nginxPort}"
-					echo "数据库地址: $mysqlHost:$mysqlPort"
-					echo "数据库用户名: $mysqlUser"
-					echo "数据库密码: $mysqlPassword"
-					echo "数据库映射路径: $mysqlPath"
-					echo "数据库映射路径: $mysql"
-			else
-				echo "找不到NoSQL安装文件"
-				exit 1
-			fi
-	fi
+    SetInstallInfo
+    Show
+    compose_filename="docker-compose-sql.yaml"
+    downloadComposeFile
+    echo "开始安装SQL"
+    cp -rf up/docker-compose-sql.yaml docker-compose.yaml
+    replaceConfig
+    docker-compose up -d
+    if [ $? -eq 0 ]; then
+        echo "安装成功"
+        echo -e "访问地址: http://127.0.0.1:{$nginxPort}"
+        echo "数据库地址: $mysqlHost:$mysqlPort"
+        echo "数据库用户名: $mysqlUser"
+        echo "数据库密码: $mysqlPassword"
+        echo "数据库映射路径: $mysqlPath"
+        echo "数据库映射路径: $mysql"
+    else
+      echo "找不到NoSQL安装文件"
+      exit 1
+    fi
 }
-function main() {
-		# 检查docker是否安装
+function getInstallCmd() {
+  if command -v apt-get &> /dev/null; then
+    echo "apt-get"
+  elif command -v yum &> /dev/null; then
+    echo "yum"
+    pac="yum"
+  else
+    echo "无法确定包管理工具,目前仅支持 apt-get 或 yum"
+    exit 1
+  fi
+}
+function checkInstallInfo() {
+    # 检查docker是否安装
 		docker ps > /dev/null 2>&1
 		if [ $? -ne 0 ]; then
 			echo "请先安装并启动docker服务"
 			exit 1
 		fi
+    # 检查wget 是否安装
+    if ! command -v wget &> /dev/null; then
+        getInstallCmd
+        echo "wget 未安装，正在安装..."
+#        sudo ${pac} update
+        sudo ${pac} install -y wget
+        if [ $? -ne 0 ]; then
+            echo "wget 安装失败，请手动安装"
+            exit 1
+        fi
+    fi
+    # 检查docker-compose 是否安装
+    if ! command -v docker-compose &> /dev/null; then
+        getInstallCmd
+        echo "docker-compose 未安装，正在安装..."
+#        sudo ${pac} update
+        sudo ${pac} install -y docker-compose
+        if [ $? -ne 0 ]; then
+            echo "docker-compose 安装失败，请手动安装"
+            exit 1
+        fi
+    fi
+    # 检查docker-compose-plugin 是否安装
+    ${pac} list --installed | grep -q docker-compose-plugin > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        echo "docker-compose-plugin 未安装，正在安装..."
+        sudo ${pac} install -y docker-compose-plugin
+        if [ $? -ne 0 ]; then
+            echo "docker-compose-plugin 安装失败，请手动安装"
+            exit 1
+        fi
+    fi
+}
+function main() {
+    checkInstallInfo
 		# 选择安装方式
 		echo "请选择安装方式"
 		echo "1. 我需要全新安装数据库"
