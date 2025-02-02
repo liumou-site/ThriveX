@@ -58,6 +58,9 @@ git clone https://gitee.com/liumou_site/ThriveX.git&&cd ThriveX/&&bash install.s
 > 基于阿里云基础镜像构建,无需配置镜像加速器
 
 
+[部署教程-手动运行容器](program/readme.md)
+
+
 # 默认账号密码
 
 ```shell
