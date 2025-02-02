@@ -9,4 +9,4 @@ COPY data/ThriveX.sql /
 COPY init.sh /init.sh
 RUN chmod +x /init.sh
 # 启动 MySQL 服务
-CMD ["/init.sh"]
+#CMD ["/init.sh"]
