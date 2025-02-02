@@ -8,14 +8,13 @@ WORKDIR /docker-entrypoint-initdb.d
 ENV MYSQL_ALLOW_EMPTY_PASSWORD=yes
 
 # 复制 SQL 文件到容器中
-COPY data/ThriveX.sql /docker-entrypoint-initdb.d/
+COPY data/ThriveX.sql /
+COPY init.sh /init.sh
+RUN chmod +x /init.sh
 
 # 创建一个初始化脚本
-RUN echo "CREATE DATABASE IF NOT EXISTS ThriveX CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;" > init.sql
-RUN echo "GRANT ALL PRIVILEGES ON ThriveX.* TO 'root'@'%';" >> init.sql
-
-# 将初始化脚本复制到 /docker-entrypoint-initdb.d 目录
-COPY init.sql /docker-entrypoint-initdb.d/
+RUN echo "CREATE DATABASE IF NOT EXISTS ThriveX CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;" > /docker-entrypoint-initdb.d/init.sql
+RUN echo "GRANT ALL PRIVILEGES ON ThriveX.* TO 'root'@'%';" >> /docker-entrypoint-initdb.d/init.sql
 
 # 启动 MySQL 服务
-CMD ["--default-authentication-plugin=mysql_native_password"]
+CMD ["/init.sh"]
