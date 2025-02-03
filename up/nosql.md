@@ -12,12 +12,17 @@ cd ThriveX/
 ```
 ## 配置环境变量
 
-编辑文件`up/docker-compose-nosql.yaml`
+复制文件`up/docker-compose-nosql.yaml`
 
 ```shell
-vim up/docker-compose-nosql.yaml
+cp -rf up/docker-compose-nosql.yaml docker-compose.yaml
 ```
 
+编辑文件
+
+```shell
+vim docker-compose.yaml
+```
 
 ### 后端(server)部分
 
@@ -56,6 +61,13 @@ vim up/docker-compose-nosql.yaml
 
 # 启动
 
+## 使用docker-compose启动
+
 ```shell
 docker-compose up -d -f up/docker-compose-nosql.yaml
+```
+
+## 使用docker compose启动
+```shell
+docker compose up -d -f up/docker-compose-nosql.yaml
 ```

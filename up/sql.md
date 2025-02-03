@@ -12,10 +12,16 @@ cd ThriveX/
 ```
 ## 配置环境变量
 
-编辑文件`up/docker-compose-sql.yaml`
+复制文件`up/docker-compose-sql.yaml`
 
 ```shell
-vim up/docker-compose-sql.yaml
+cp -rf up/docker-compose-sql.yaml docker-compose.yaml
+```
+
+编辑文件
+
+```shell
+vim docker-compose.yaml
 ```
 
 
@@ -69,6 +75,12 @@ vim up/docker-compose-sql.yaml
 
 # 启动
 
+## 使用docker-compose启动（旧版插件)
 ```shell
-docker-compose up -d -f up/docker-compose-sql.yaml
+docker-compose up -d
+```
+
+## 使用docker compose启动(新版)
+```shell
+docker compose up -d
 ```
