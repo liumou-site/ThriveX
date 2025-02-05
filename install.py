@@ -173,6 +173,8 @@ def install_nosql():
     show()
     # 指定docker-compose文件名用于NoSQL安装
     compose_filename = "docker-compose-nosql.yaml"
+    if args.dev:
+        compose_filename = "docker-compose-nosql-dev.yaml"
     # 下载docker-compose文件
     download_compose_file()
     # 记录安装开始日志
@@ -217,6 +219,8 @@ def install_sql():
     # set_install_info()
     show()
     compose_filename = "docker-compose-sql.yaml"
+    if args.dev:
+        compose_filename = "docker-compose-dev.yaml"
     download_compose_file()
     logger.info("开始安装SQL")
     run_command(f"cp -rf up/{compose_filename} {compose_filename}")

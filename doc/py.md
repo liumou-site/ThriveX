@@ -1,9 +1,17 @@
 # 使用帮助
 
 
+## 使用Github
 ```shell
-python3 install.py -h
+wget -O install.py https://github.com/liumou-site/ThriveX/raw/refs/heads/main/install.py
 ```
+
+## 使用gitee
+```shell
+wget -O install.py https://gitee.com/liumou_site/ThriveX/raw/main/install.py
+```
+
+## 获取帮助
 
 ```shell
 root@tb3:/data/git/ThriveX# python3 install.py -h
@@ -31,16 +39,17 @@ root@tb3:/data/git/ThriveX#
 
 
 # 安装命令
+
 ## github-全球
 
 ```shell
-git clone https://github.com/ThriveX/ThriveX.git&&cd ThriveX/&&python3 install.py
+python3 install.py
 ```
 
 ## gitee-国内推荐
 
 ```shell
-git clone https://gitee.com/liumou_site/ThriveX.git&&cd ThriveX/&&python3 install.py -g
+python3 install.py -g
 ```
 
 > 请使用`root`用户执行以上命令
