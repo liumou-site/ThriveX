@@ -226,7 +226,7 @@ function checkInstallInfo() {
         fi
     fi
     # 检查docker-compose-plugin 是否安装
-    ${pac} list --installed | grep -q docker-compose-plugin > /dev/null 2>&1
+    ${pac} list --installed | grep docker-compose-plugin > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         echo "docker-compose-plugin 未安装，正在安装..."
         sudo ${pac} install -y docker-compose-plugin
