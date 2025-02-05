@@ -234,6 +234,8 @@ function checkInstallInfo() {
             echo "docker-compose-plugin 安装失败，请手动安装"
             exit 1
         fi
+    else
+        echo "docker-compose-plugin 已安装"
     fi
 }
 function main() {
