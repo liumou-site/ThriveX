@@ -1,7 +1,7 @@
 # 使用官方的Node.js镜像作为基础镜像
 FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/node-20-alpine AS builder
 # 设置环境变量，存储构建时间（北京时间）
-ENV BUILD_TIME=2025-2-5-17:55:06
+ENV BUILD_TIME=2025-2-5_23:46:50
 
 # 使用 LABEL 指令将构建时间设置为镜像的标签
 LABEL build_time="${BUILD_TIME}"
@@ -23,7 +23,7 @@ RUN npm install
 # 设置环境变量
 ENV NEXT_PUBLIC_CACHING_TIME=0
 # 设置后端接口地址,http://你的后端域名/api
-ENV NEXT_PUBLIC_PROJECT_API=""
+ENV NEXT_PUBLIC_PROJECT_API="http://thrive_server/api"
 # 高德地图key
 ENV NEXT_PUBLIC_GAODE_KEY_CODE=""
 # 高德地图秘钥
@@ -31,6 +31,7 @@ ENV NEXT_PUBLIC_GAODE_SECURITYJS_CODE=""
 
 # 构建Next.js应用
 RUN npm run build
+RUN sed -i "s@http.*\(com\|org\|cn\)@http://mirrors.cloud.tencent.com@g" /etc/apt/sources.list.d/debian.sources
 
 # 暴露应用运行的端口
 EXPOSE 9001

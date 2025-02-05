@@ -2,8 +2,17 @@
 
 
 ## 拉取代码
+
+### 默认
+
 ```shell
 git clone https://github.com/LiuYuYang01/ThriveX.git
+```
+
+### 国内推荐
+
+```shell
+git clone https://gitee.com/liumou_site/ThriveX.git
 ```
 
 ## 进入项目
@@ -76,11 +85,17 @@ vim docker-compose.yaml
 # 启动
 
 ## 使用docker-compose启动（旧版插件)
+
 ```shell
 docker-compose up -d
 ```
 
+> 需要安装`docker-compose`
+
 ## 使用docker compose启动(新版)
+
 ```shell
 docker compose up -d
 ```
+
+> 需要安装`docker-compose-plugin`
