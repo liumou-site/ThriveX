@@ -102,7 +102,7 @@ services:
     container_name: nginx
     hostname: nginx-thrive
     ports:
-      - "80:80"
+      - "9007:80"
     networks:
       thrive_network:
         ipv4_address: 10.178.178.15

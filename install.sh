@@ -226,16 +226,25 @@ function checkInstallInfo() {
         fi
     fi
     # 检查docker-compose-plugin 是否安装
-    ${pac} list --installed | grep docker-compose-plugin > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        echo "docker-compose-plugin 未安装，正在安装..."
-        sudo ${pac} install -y docker-compose-plugin
-        if [ $? -ne 0 ]; then
-            echo "docker-compose-plugin 安装失败，请手动安装"
-            exit 1
-        fi
+    if [[ ${pac} == "apt" ]];then
+      dpkg -l | grep -v grep |grep docker-compose-plugin
+      if [[ $? -eq 0 ]]; then
+          echo "docker-compose-plugin 已安装"
+          break
+      fi
     else
-        echo "docker-compose-plugin 已安装"
+      rpm -qa | grep -v grep | grep docker-compose-plugin
+      if [[ $? -eq 0 ]]; then
+          echo "docker-compose-plugin 已安装"
+          break
+      fi
+    fi
+
+    echo "docker-compose-plugin 未安装，正在安装..."
+    sudo ${pac} install -y docker-compose-plugin
+    if [ $? -ne 0 ]; then
+        echo "docker-compose-plugin 安装失败，请手动安装"
+        exit 1
     fi
 }
 function main() {

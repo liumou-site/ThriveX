@@ -26,9 +26,10 @@ ENV EMAIL_PORT=465
 ENV EMAIL_USERNAME=33311118881@qq.com
 ## 邮箱授权码（xxxxxxxxxxxxx）
 ENV EMAIL_PASSWORD=xxxxxxxxxxxxx
+ENV VERSION=2.4.4
 
 # 将jar包复制到工作目录中并拷贝给app.jar
-COPY blog.jar /thrive/app.jar
+ADD https://github.com/LiuYuYang01/ThriveX-Server/releases/download/2.4.4/blog.jar /thrive/app.jar
 
 # 创建容器成功做的事情,等价于：java -jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
