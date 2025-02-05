@@ -49,12 +49,25 @@ function SetMySQLPassword() {
 		done
 }
 function SetNginx() {
-	echo "请输入Nginx端口映射端口,默认: 9007"
-	read -p "请输入：" nginxPort
-	if [ -z "$nginxPort" ]; then
-		echo -e "使用默认端口: 9007"
-		nginxPort="9007"
-	fi
+  while true; do
+      echo "请输入Nginx端口映射端口,默认: 9007"
+      read -p "请输入：" nginxPort
+      if [ -z "$nginxPort" ]; then
+        echo -e "使用默认端口: 9007"
+        nginxPort="9007"
+      fi
+        # 检查本地是否已占用端口
+      if [[ -n "$nginxPort" ]];then
+        lsof -i:$nginxPort > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+          echo "端口 $nginxPort 已被占用,请修改端口"
+          exit 1
+        else
+          echo "端口 $nginxPort 可用"
+          break
+        fi
+      fi
+  done
 }
 
 function SetInstallInfo() {
@@ -80,7 +93,7 @@ function SetInstallInfo() {
 				echo "使用默认主机"
 				mysqlHost="10.178.178.10"
 		fi
-		echo "请输入数据库端口,默认: 3306"
+		echo "请输入数据库映射端口,默认: 3306"
 		read -p "请输入：" mysqlPort
 		if [ -z "$mysqlPort" ]; then
 				echo "使用默认端口"
@@ -108,12 +121,19 @@ function Show() {
 function replaceConfig() {
 	if [[ -f docker-compose.yaml ]];then
 			# 替换端口
+			if [[ -z $mysqlPort || -z $mysqlUser || -z $mysqlPassword || $mysqlHost ]];then
+        echo "数据库信息不能为空"
+        exit 1
+      fi
 			sed -i "s/3306/$mysqlPort/g" docker-compose.yaml
 			sed -i "s/ThriveX/$mysqlUser/g" docker-compose.yaml
 			sed -i "s/ThriveX@123?/$mysqlPassword/g" docker-compose.yaml
 			# 替换主机
 			sed -i "s/10.178.178.10/$mysqlHost/g" docker-compose.yaml
 			# 替换nginx
+			if [[ -z "$nginxPort" ]];then
+        SetNginx
+      fi
 			sed -i "s/80:80/$nginxPort:80/g" docker-compose.yaml
 	else
 		echo "找不到docker-compose.yaml文件"

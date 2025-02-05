@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.39, for macos14 (arm64)
 --
--- Host: 127.0.0.1    Database: thrive
+-- Host: 127.0.0.1    Database: ThriveX
 -- ------------------------------------------------------
 -- Server version	8.0.39
 CREATE DATABASE IF NOT EXISTS ThriveX;
