@@ -117,17 +117,22 @@ def set_install_info():
     if not mysql_port:
         logger.debug("使用默认端口")
         mysql_port = "3306"
-
-def show():
-    print("----------------信息确认----------------")
-    if install_set_sql == "1":
+def info():
+    if args.sql:
         print(f"数据库映射路径: {mysql_path}")
     print(f"数据库用户名: {mysql_user}")
     print(f"数据库密码: {mysql_password}")
     print(f"数据库主机: {mysql_host}")
     print(f"数据库端口: {mysql_port}")
     print(f"Nginx端口: {nginx_port}")
+    if nginx_port == 80:
+        print("访问地址: http://127.0.0.1")
+    else:
+        print(f"访问地址: http://127.0.0.1:{nginx_port}")
     print("--------------------------------------")
+def show():
+    print("----------------信息确认----------------")
+    info()
     confirm = input("是否继续安装?(y/n): ")
     if confirm.lower() != "y":
         print("取消安装")
@@ -154,21 +159,58 @@ def replace_config():
         file.write(content)
 
 def install_nosql():
+    """
+    安装NoSQL数据库服务。
+
+    该函数通过下载配置文件并启动Docker容器来安装NoSQL数据库服务。
+    它会全局设置docker-compose文件名，并通过替换配置文件中的占位符来配置服务。
+    最后，它将启动服务并打印访问信息。
+    """
     global compose_filename
+    # 设置安装信息，可能包括从环境变量或配置文件中获取数据
     # set_install_info()
+    # 显示安装信息
     show()
+    # 指定docker-compose文件名用于NoSQL安装
     compose_filename = "docker-compose-nosql.yaml"
+    # 下载docker-compose文件
     download_compose_file()
+    # 记录安装开始日志
     logger.info("开始安装NoSQL")
+    # 替换配置文件中的占位符为实际值
     replace_config()
+    # 运行命令启动NoSQL服务容器
     run_command("docker-compose up -d")
+    # 记录安装成功日志
     logger.info("安装成功")
-    print(f"访问地址: http://127.0.0.1:{nginx_port}")
-    print(f"数据库地址: {mysql_host}:{mysql_port}")
-    print(f"数据库用户名: {mysql_user}")
-    print(f"数据库密码: {mysql_password}")
-    print(f"数据库映射路径: {mysql_path}")
-    print(f"Nginx端口: {nginx_port}")
+    # 打印NoSQL服务的访问信息
+    info()
+
+def install_sql_dev():
+    """
+    安装SQL开发环境的函数。
+    此函数负责执行SQL开发环境的安装过程，包括配置docker-compose文件、下载必要的文件、替换配置，
+    以及运行Docker Compose命令来启动服务。
+    """
+    global compose_filename
+    # 设置安装信息，可能包括一些预安装的配置或检查
+    # set_install_info()
+    # 显示安装信息或进度
+    show()
+    # 指定docker-compose文件名为开发环境的配置文件
+    compose_filename = "docker-compose-dev.yaml"
+    # 下载docker-compose配置文件
+    download_compose_file()
+    # 记录日志，开始安装
+    logger.info("开始安装DevSQL")
+    # 替换配置文件中的占位符为实际配置值
+    replace_config()
+    # 运行命令启动Docker Compose服务
+    run_command("docker-compose up -d")
+    # 安装完成后记录日志
+    logger.info("安装成功")
+    # 打印访问地址和数据库信息
+    info()
 
 def install_sql():
     global compose_filename
@@ -181,11 +223,7 @@ def install_sql():
     replace_config()
     run_command("docker-compose up -d")
     logger.info("安装成功")
-    print(f"访问地址: http://127.0.0.1:{nginx_port}")
-    print(f"数据库地址: {mysql_host}:{mysql_port}")
-    print(f"数据库用户名: {mysql_user}")
-    print(f"数据库密码: {mysql_password}")
-    print(f"数据库映射路径: {mysql_path}")
+    info()
 
 def get_install_cmd():
     global pac
@@ -251,7 +289,6 @@ def main():
     if option == "1":
         install_sql()
     elif option == "2":
-        install_set_sql = "0"
         install_nosql()
     elif option == "3":
         print("自行构建镜像")
@@ -271,6 +308,7 @@ if __name__ == "__main__":
     arg.add_argument('-s', '--sql', action='store_true', help="安装sql数据库", default=False, required=False)
     arg.add_argument('-g', '--gitee', action='store_true', help="使用gitee下载docker-compose文件", default=False, required=False)
     arg.add_argument('-b', '--build', action='store_true', help="自行构建镜像", default=False, required=False)
+    arg.add_argument('-dev', '--dev', action='store_true', help="使用开发版镜像运行", default=False, required=False)
     args = arg.parse_args()
     if args.gitee:
         url_compose_root = "https://gitee.com/liumou_site/ThriveX/raw/main"
