@@ -3,8 +3,8 @@
 -- Host: 127.0.0.1    Database: thrive
 -- ------------------------------------------------------
 -- Server version	8.0.39
-CREATE DATABASE IF NOT EXISTS thrive;
-use thrive;
+CREATE DATABASE IF NOT EXISTS ThriveX;
+use ThriveX;
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
