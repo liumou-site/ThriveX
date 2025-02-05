@@ -1,7 +1,7 @@
 # 使用官方的Node.js镜像作为基础镜像
 FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/node-20-alpine AS builder
 # 设置环境变量，存储构建时间（北京时间）
-ENV BUILD_TIME=$(date -u +"%Y-%m-%d %H:%M:%S %z" -d "+8 hours")
+ENV BUILD_TIME=2025年2月5日16:27:27
 
 # 使用 LABEL 指令将构建时间设置为镜像的标签
 LABEL build_time="${BUILD_TIME}"
