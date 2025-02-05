@@ -1,9 +1,9 @@
 services:
   # 数据库
   mysql:
-    container_name: mysql
+    container_name: thrive_mysql
     image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql
-    hostname: mysql-thrive
+    hostname: thrive_mysql
     ports:
       - "3307:3306"
     networks:
@@ -26,9 +26,9 @@ services:
 
   # 前端项目
   blog:
-    container_name: blog
+    container_name: thrive_blog
     image: registry.cn-hangzhou.aliyuncs.com/thrive/blog
-    hostname: blog-thrive
+    hostname: thrive_blog
     ports:
       - "9001:9001"
     networks:
@@ -36,7 +36,7 @@ services:
         ipv4_address: 10.178.178.12
     environment:
       # 设置后端接口地址,http://你的后端域名/api
-      NEXT_PUBLIC_PROJECT_API: http://server-thrive:9003/api
+      NEXT_PUBLIC_PROJECT_API: http://server_thrive:9003/api
       # 高德地图key
       NEXT_PUBLIC_GAODE_KEY_CODE: ""
       # 高德地图秘钥
@@ -47,9 +47,9 @@ services:
 
   # 控制端项目
   admin:
-    container_name: admin
+    container_name: thrive_admin
     image: registry.cn-hangzhou.aliyuncs.com/thrive/admin:latest
-    hostname: admin-thrive
+    hostname: thrive_admin
     ports:
       - "9002:80"
     networks:
@@ -57,7 +57,7 @@ services:
         ipv4_address: 10.178.178.13
     environment:
       # 设置后端接口地址,http://你的后端域名/api
-      VITE_PROJECT_API: http://server-thrive:9003/api
+      VITE_PROJECT_API: http://server_thrive:9003/api
       # 百度统计站点ID
       VITE_BAIDU_TONGJI_SITE_ID: ""
       # 百度统计秘钥
@@ -72,9 +72,9 @@ services:
 
   # 后端项目
   server:
-    container_name: server
+    container_name: thrive_server
     image: registry.cn-hangzhou.aliyuncs.com/thrive/server
-    hostname: server-thrive
+    hostname: server_thrive
     ports:
       - "9003:9003"
     networks:
@@ -103,8 +103,8 @@ services:
   # 服务器
   nginx:
     image: registry.cn-hangzhou.aliyuncs.com/thrive/nginx
-    container_name: nginx
-    hostname: nginx-thrive
+    container_name: thrive_nginx
+    hostname: thrive_nginx
     ports:
       - "9007:80"
     networks:
