@@ -3,7 +3,7 @@ services:
   mysql:
     container_name: mysql
     image: mysql:8.0
-    hostname: mysql-thrive
+    hostname: thrive_mysql
     ports:
       - "3307:3306"
     networks:
@@ -104,7 +104,7 @@ services:
         ipv4_address: 172.178.178.14
     environment:
       ## 设置数据库主机地址
-      DB_HOST: mysql-thrive
+      DB_HOST: thrive_mysql
       ## 设置数据库名,强烈建议修改(首次启动有效)-必须和前面的数据库名一致
       DB_NAME: thrive
       ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致

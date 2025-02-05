@@ -23,7 +23,7 @@ services:
   admin:
     container_name: thrive_admin
     image: registry.cn-hangzhou.aliyuncs.com/thrive/admin:latest
-    hostname: thrive_blog
+    hostname: thrive_admin
     ports:
       - "9002:80"
     networks:
@@ -47,7 +47,7 @@ services:
   server:
     container_name: thrive_server
     image: registry.cn-hangzhou.aliyuncs.com/thrive/server
-    hostname: server_thrive
+    hostname: thrive_server
     ports:
       - "9003:9003"
     networks:
@@ -75,7 +75,7 @@ services:
   nginx:
     image: registry.cn-hangzhou.aliyuncs.com/thrive/nginx
     container_name: thrive_nginx
-    hostname: nginx_nginx
+    hostname: thrive_nginx
     ports:
       - "9007:80"
     networks:

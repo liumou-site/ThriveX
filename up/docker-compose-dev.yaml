@@ -3,7 +3,7 @@ services:
   mysql:
     container_name: thrive_mysql
     image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql:dev
-    hostname: thrive-mysql
+    hostname: thrive_mysql
     ports:
       - "3307:3306"
     networks:
@@ -70,7 +70,7 @@ services:
   server:
     container_name: thrive_server
     image: registry.cn-hangzhou.aliyuncs.com/thrive/server:dev
-    hostname: thrive-server
+    hostname: thrive_server
     ports:
       - "9003:9003"
     networks:

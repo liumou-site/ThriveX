@@ -3,7 +3,7 @@ services:
   mysql:
     container_name: thrive_mysql
     image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql
-    hostname: thrive_server
+    hostname: thrive_mysql
     ports:
       - "3307:3306"
     networks:
@@ -92,6 +92,8 @@ services:
       EMAIL_USERNAME: 123456789@qq.com
       ## 设置邮箱密码
       EMAIL_PASSWORD: 123456789
+    depends_on:
+      - mysql
 
   # 服务器
   nginx:
