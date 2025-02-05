@@ -3,10 +3,7 @@ FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/mysql:8.0
 
 # 设置工作目录
 WORKDIR /docker-entrypoint-initdb.d
-
-# 复制 SQL 文件到容器中
-COPY data/ThriveX.sql /
-COPY init.sh /init.sh
-RUN chmod +x /init.sh
+COPY data/ThriveX.sql /docker-entrypoint-initdb.d/
+RUN chmod +x /docker-entrypoint-initdb.d/ThriveX.sql
 # 启动 MySQL 服务
 #CMD ["/init.sh"]
