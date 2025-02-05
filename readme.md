@@ -17,6 +17,12 @@ yum clean all&&yum makecache &&yum install docker docker-compose git docker-comp
 apt update && apt install docker docker-compose git docker-compose-plugin -y
 ```
 
+## 安装requests
+
+```shell
+pip3 install requests==2.31.0
+```
+
 > 请使用`root`用户执行以上命令
 
 # 部署教程-一键

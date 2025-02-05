@@ -81,10 +81,8 @@ services:
       thrive_network:
         ipv4_address: 10.178.178.14
     environment:
-      ## 设置数据库主机地址
-      DB_HOST: 10.178.178.10
-      ## 设置数据库名,强烈建议修改(首次启动有效)-必须和前面的数据库名一致
-      DB_NAME: thrive
+      ## 设置数据库连接地址,建议默认
+      DB_INFO: 10.178.178.10/thrive
       ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
       DB_USERNAME: thrive
       ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
@@ -108,7 +106,7 @@ services:
     container_name: nginx
     hostname: nginx-thrive
     ports:
-      - "80:80"
+      - "9007:80"
     networks:
       thrive_network:
         ipv4_address: 10.178.178.15
