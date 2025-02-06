@@ -8,6 +8,7 @@ LABEL build_time="${BUILD_TIME}"
 # 设置工作目录
 WORKDIR /docker-entrypoint-initdb.d
 ADD https://github.com/LiuYuYang01/ThriveX-Server/raw/refs/heads/master/ThriveX.sql /ThriveX.sql
-RUN chmod +x /ThriveX.sql
+COPY init.sh /init.sh
+RUN chmod +x /ThriveX.sql && chmod +x /init.sh
 # 启动 MySQL 服务
 CMD ["/init.sh"]
