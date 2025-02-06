@@ -8,4 +8,4 @@ LABEL build_time="${BUILD_TIME}"
 # 设置工作目录
 WORKDIR /docker-entrypoint-initdb.d
 ADD https://github.com/LiuYuYang01/ThriveX-Server/raw/refs/heads/master/ThriveX.sql /docker-entrypoint-initdb.d/ThriveX.sql
-RUN chmod +x /ThriveX.sql
+RUN chmod +x /docker-entrypoint-initdb.d/ThriveX.sql
