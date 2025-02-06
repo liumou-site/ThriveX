@@ -22,7 +22,7 @@ RUN npm config set registry https://registry.npmmirror.com
 RUN npm install
 
 # 设置环境变量
-ENV VITE_PROJECT_API=http://10.178.178.14/api
+ENV VITE_PROJECT_API=http://thrive_server:9003/api
 ## 百度统计站点ID
 ENV VITE_BAIDU_TONGJI_SITE_ID=""
 ## 百度统计秘钥
