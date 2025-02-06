@@ -32,18 +32,19 @@ ENV VITE_AI_APIPassword=""
 ENV VITE_AI_MODEL=lite
 ## 高德地图坐标秘钥
 ENV VITE_GAODE_WEB_API=""
-
 # 构建项目
-RUN npm run build
-
-# 使用 Nginx 作为生产环境的基础镜像
-FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/nginx:alpine
-
-# 复制构建输出到 Nginx 的默认静态文件目录
-COPY --from=builder /admin/dist /usr/share/nginx/html
-
-# 暴露端口
-EXPOSE 80
+#RUN npm run build
+COPY init.sh /admin/init.sh
+RUN chmod +x /admin/init.sh
+## 使用 Nginx 作为生产环境的基础镜像
+#FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/nginx:alpine
+#
+## 复制构建输出到 Nginx 的默认静态文件目录
+#COPY --from=builder /admin/dist /usr/share/nginx/html
+#
+## 暴露端口
+#EXPOSE 80
 
 # 启动 Nginx
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]
+CMD ["/admin/init.sh"]
