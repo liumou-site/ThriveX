@@ -41,7 +41,8 @@ services:
       NEXT_PUBLIC_GAODE_SECURITYJS_CODE: ""
     depends_on:
       - server
-
+    volumes:
+      - /data/ThriveX/blog:/blog
   # 控制端项目
   admin:
     container_name: thrive_admin
@@ -78,7 +79,7 @@ services:
         ipv4_address: 10.178.178.14
     environment:
       ## 设置数据库连接地址,建议默认
-      DB_INFO: 10.178.178.10:3306/ThriveX
+      DB_INFO: mysql.thrive.site:3306/ThriveX
       ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
       DB_USERNAME: thrive
       ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致

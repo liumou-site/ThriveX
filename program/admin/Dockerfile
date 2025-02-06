@@ -1,7 +1,7 @@
 # 使用官方的Node.js镜像作为基础镜像
 FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/node-20-alpine AS builder
 # 设置环境变量，存储构建时间（北京时间）
-ENV BUILD_TIME=2025-2-5_23:46:38
+ENV BUILD_TIME=2025-2-6_18:05:23
 
 # 使用 LABEL 指令将构建时间设置为镜像的标签
 LABEL build_time="${BUILD_TIME}"
@@ -9,10 +9,10 @@ LABEL build_time="${BUILD_TIME}"
 RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
 
 # 克隆代码
-RUN git clone https://gitee.com/liu_yu_yang666/ThriveX-Admin.git /thrive
+RUN git clone https://gitee.com/liu_yu_yang666/ThriveX-Admin.git /admin
 
 # 设置工作目录
-WORKDIR /thrive
+WORKDIR /admin
 
 
 # 配置 npm 镜像源
@@ -22,7 +22,7 @@ RUN npm config set registry https://registry.npmmirror.com
 RUN npm install
 
 # 设置环境变量
-ENV VITE_PROJECT_API=http://thrive_server:9003/api
+ENV VITE_PROJECT_API=http://server.thrive.site:9003/api
 ## 百度统计站点ID
 ENV VITE_BAIDU_TONGJI_SITE_ID=""
 ## 百度统计秘钥
@@ -40,7 +40,7 @@ RUN npm run build
 FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/nginx:alpine
 
 # 复制构建输出到 Nginx 的默认静态文件目录
-COPY --from=builder /thrive/dist /usr/share/nginx/html
+COPY --from=builder /admin/dist /usr/share/nginx/html
 
 # 暴露端口
 EXPOSE 80

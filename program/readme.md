@@ -20,8 +20,8 @@ root@tb3:~#
 ## 启动数据库
 
 ```shell
-docker run -d --name=thrive_mysql --hostname=thrive_mysql -v /data/ThriveX/mysql:/var/lib/mysql --restart=always --network=thrive_network \
---ip=10.178.178.10 -p 3306:3306 \
+docker run -d --name=thrive_mysql --hostname=mysql.thrive.site -v /data/ThriveX/mysql:/var/lib/mysql --restart=always --network=thrive_network \
+--ip=10.178.178.10 -p 3307:3306 \
 -e MYSQL_ROOT_PASSWORD=ThriveX@123? \
 -e MYSQL_DATABASE=ThriveX \
 -e MYSQL_USER=thrive \
@@ -31,7 +31,7 @@ docker run -d --name=thrive_mysql --hostname=thrive_mysql -v /data/ThriveX/mysql
 效果
 
 ```shell
-root@tb3:~# docker run -d --name=thrive_mysql --hostname=thrive_mysql -v /data/ThriveX/mysql:/var/lib/mysql --restart=always --network=thrive_network --ip=10.178.178.10 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=ThriveX@123? -e MYSQL_DATABASE=ThriveX -e MYSQL_USER=thrive -e MYSQL_PASSWORD=ThriveX@123? registry.cn-hangzhou.aliyuncs.com/thrive/mysql
+root@tb3:~# docker run -d --name=thrive_mysql --hostname=mysql.thrive.site -v /data/ThriveX/mysql:/var/lib/mysql --restart=always --network=thrive_network --ip=10.178.178.10 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=ThriveX@123? -e MYSQL_DATABASE=ThriveX -e MYSQL_USER=thrive -e MYSQL_PASSWORD=ThriveX@123? registry.cn-hangzhou.aliyuncs.com/thrive/mysql
 5af0a89e3858fa303ee4b0527d7f49f45f605b7ce842f9e2d0d8c9fe3a8d7b87
 root@tb3:~# 
 ```
@@ -39,13 +39,13 @@ root@tb3:~#
 ## 启动 server 后端
 
 ```shell
-docker run -d --name=thrive_server --hostname=thrive_server --restart=always --network=thrive_network --ip=10.178.178.14 \
+docker run -d --name=thrive_server --hostname=server.thrive.site --restart=always --network=thrive_network --ip=10.178.178.14 \
 -p 9003:9003 registry.cn-hangzhou.aliyuncs.com/thrive/server
 ```
 
 默认变量值:
 
-* `DB_INFO=thrive_mysql:3306/ThriveX`: 如果不清楚用途,建议默认，除非使用外部数据库
+* `DB_INFO=mysql.thrive.site:3306/ThriveX`: 如果不清楚用途,建议默认，除非使用外部数据库
 * `DB_USERNAME=thrive`: 建议默认
 * `DB_PASSWORD`: 必须使用自己的数据库密码
 * `EMAIL_HOST=smtp.qq.com` : 建议默认
@@ -56,7 +56,7 @@ docker run -d --name=thrive_server --hostname=thrive_server --restart=always --n
 效果
 
 ```shell
-root@tb3:~# docker run -d --name=thrive_server --hostname=thrive_server --restart=always --network=thrive_network --ip=10.178.178.14 \
+root@tb3:~# docker run -d --name=thrive_server --hostname=server.thrive.site --restart=always --network=thrive_network --ip=10.178.178.14 \
 -p 9003:9003 registry.cn-hangzhou.aliyuncs.com/thrive/server
 3661bdcc5721ed925753cd72f392d9dccbc1ec2a9e3399fb322a0e8733ed3b9c
 root@tb3:~# 
@@ -66,7 +66,7 @@ root@tb3:~#
 ## 启动 admin 前端
 
 ```shell
-docker run -tid --name=thrive_admin --hostname=thrive_admin --restart=always --network=thrive_network \
+docker run -tid --name=thrive_admin --hostname=admin.thrive.site --restart=always --network=thrive_network \
 --ip=10.178.178.13 -p 9002:80 \
 -e VITE_BAIDU_TONGJI_SITE_ID="ID" \
 -e VITE_BAIDU_TONGJI_ACCESS_TOKEN="TOKEN" \
@@ -97,7 +97,7 @@ registry.cn-hangzhou.aliyuncs.com/thrive/admin
 效果
 
 ```shell
-root@tb3:~# docker run -tid --name=thrive_admin --hostname=thrive_admin --restart=always --network=thrive_network \
+root@tb3:~# docker run -tid --name=thrive_admin --hostname=admin.thrive.site --restart=always --network=thrive_network \
 --ip=10.178.178.13 -p 9002:80 \
 -e VITE_BAIDU_TONGJI_SITE_ID="ID" \
 -e VITE_BAIDU_TONGJI_ACCESS_TOKEN="TOKEN" \
@@ -122,7 +122,7 @@ root@tb3:~#
 ## 启动 blog 前端
 
 ```shell
-docker run -d --name=thrive_blog --hostname=thrive_blog --restart=always --network=thrive_network \
+docker run -d --name=thrive_blog --hostname=blog.thrive.site --restart=always --network=thrive_network \
 --ip=10.178.178.12 -p 9001:9001 \
 -e NEXT_PUBLIC_GAODE_KEY_CODE="code" \
 -e NEXT_PUBLIC_GAODE_SECURITYJS_CODE="code" registry.cn-hangzhou.aliyuncs.com/thrive/blog
@@ -144,7 +144,7 @@ docker run -d --name=thrive_blog --hostname=thrive_blog --restart=always --netwo
 效果
 
 ```shell
-root@tb3:~# docker run -d --name=thrive_blog --hostname=thrive_blog --restart=always --network=thrive_network \
+root@tb3:~# docker run -d --name=thrive_blog --hostname=blog.thrive.site --restart=always --network=thrive_network \
 --ip=10.178.178.12 -p 9001:9001 \
 -e NEXT_PUBLIC_GAODE_KEY_CODE="code" \
 -e NEXT_PUBLIC_GAODE_SECURITYJS_CODE="code" registry.cn-hangzhou.aliyuncs.com/thrive/blog
