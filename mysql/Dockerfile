@@ -7,5 +7,5 @@ ENV BUILD_TIME=2025-2-6_20:36:36
 LABEL build_time="${BUILD_TIME}"
 # 设置工作目录
 WORKDIR /docker-entrypoint-initdb.d
-ADD https://github.com/LiuYuYang01/ThriveX-Server/raw/refs/heads/master/ThriveX.sql /docker-entrypoint-initdb.d/ThriveX.sql
+COPY ThriveX.sql .
 RUN chmod +x /docker-entrypoint-initdb.d/ThriveX.sql
