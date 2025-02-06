@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-VITE_PROJECT_API="http://server-thrive:9003/api"
+VITE_PROJECT_API="http://server.thrive.site:9003/api"
 VITE_BAIDU_TONGJI_SITE_ID=0
 VITE_BAIDU_TONGJI_ACCESS_TOKEN="c1"
 VITE_AI_APIPassword="c2"

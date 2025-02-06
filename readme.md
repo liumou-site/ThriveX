@@ -1,5 +1,7 @@
 # ThriveX
 
+部署之前,需要获取相关平台API信息,请参考[API获取](https://docs.liuyuyang.net/docs/%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/API/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE.html)
+
 
 # 依赖安装
 

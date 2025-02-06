@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -e
-#mysqld &
+mysqld
 if [[ -f /ThriveX.sql ]];then
   echo "开始导入数据库"
   # 判断是否能否使用root登录
   mysql -u root -p$MYSQL_ROOT_PASSWORD -e "SELECT 1;" > /dev/null 2>&1
   if [ $? -eq 0 ]; then
+  		echo "使用root登录成功"
       mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
       if [[ -n "$MYSQL_USER" && -n "$MYSQL_PASSWORD" ]]; then
           mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
@@ -23,3 +24,4 @@ if [[ -f /ThriveX.sql ]];then
 else
   echo "未找到ThriveX.sql文件,无需初始化数据库"
 fi
+/usr/local/bin/docker-entrypoint.sh

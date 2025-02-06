@@ -3,7 +3,7 @@ services:
   mysql:
     container_name: mysql
     image: mysql:8.0
-    hostname: thrive_mysql
+    hostname: mysql.thrive.site
     ports:
       - "3307:3306"
     networks:
@@ -50,7 +50,7 @@ services:
   blog:
     container_name: blog
     build: program/blog
-    hostname: blog-thrive
+    hostname: blog.thrive.site
     ports:
       - "9001:9001"
     networks:
@@ -71,7 +71,7 @@ services:
   admin:
     container_name: admin
     build: program/admin
-    hostname: admin-thrive
+    hostname: admin.thrive.site
     ports:
       - "9002:80"
     networks:
@@ -128,7 +128,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
-    hostname: thrive_nginx
+    hostname: nginx.thrive.site
     ports:
       - "80:80"
     volumes:
