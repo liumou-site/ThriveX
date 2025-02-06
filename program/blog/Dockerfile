@@ -32,11 +32,11 @@ ENV NEXT_PUBLIC_GAODE_SECURITYJS_CODE=""
 # 构建Next.js应用
 RUN npm run build
 RUN sed -i "s@NEXT_PUBLIC_PROJECT_API=.*@NEXT_PUBLIC_PROJECT_API=${NEXT_PUBLIC_PROJECT_API}@g" /blog/.env
-COPY init.sh /init.sh
-RUN chmod +x /init.sh
+COPY init.sh /blog/init.sh
+RUN chmod +x /blog/init.sh
 
 # 暴露应用运行的端口
 EXPOSE 9001
 
 # 启动Next.js应用
-CMD ["/init.sh"]
+CMD ["./init.sh"]

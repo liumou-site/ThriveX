@@ -17,5 +17,5 @@ fi
 if [[ -z ${NEXT_PUBLIC_GAODE_SECURITYJS_CODE} ]];then
 	echo "NEXT_PUBLIC_GAODE_SECURITYJS_CODE is empty"
 fi
-pushd /blog
+cd /blog
 npm start
