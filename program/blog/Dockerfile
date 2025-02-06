@@ -31,7 +31,6 @@ ENV NEXT_PUBLIC_GAODE_SECURITYJS_CODE=""
 
 # 构建Next.js应用
 RUN npm run build
-RUN sed -i "s@http.*\(com\|org\|cn\)@http://mirrors.cloud.tencent.com@g" /etc/apt/sources.list.d/debi an.sources
 RUN sed -i "s@NEXT_PUBLIC_PROJECT_API=.*@NEXT_PUBLIC_PROJECT_API=${NEXT_PUBLIC_PROJECT_API}@g" /blog/.env
 COPY init.sh /init.sh
 RUN chmod +x /init.sh
