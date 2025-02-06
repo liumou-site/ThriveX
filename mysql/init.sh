@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-#mysqld &
 if [[ -f /ThriveX.sql ]];then
   echo "开始导入数据库"
   # 判断是否能否使用root登录
