@@ -23,7 +23,7 @@ RUN npm install
 # 设置环境变量
 ENV NEXT_PUBLIC_CACHING_TIME=0
 # 设置后端接口地址,http://你的后端域名/api
-ENV NEXT_PUBLIC_PROJECT_API="http://thrive_server/api"
+ENV NEXT_PUBLIC_PROJECT_API="http://thrive_server:9003/api"
 # 高德地图key
 ENV NEXT_PUBLIC_GAODE_KEY_CODE=""
 # 高德地图秘钥
