@@ -2,7 +2,7 @@ services:
   # 前端项目
   blog:
     container_name: thrive_blog
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/blog
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/blog:dev
     hostname: thrive_blog
     ports:
       - "9001:9001"
@@ -22,7 +22,7 @@ services:
   # 控制端项目
   admin:
     container_name: thrive_admin
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/admin:latest
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/admin:dev
     hostname: thrive_admin
     ports:
       - "9002:80"
@@ -46,7 +46,7 @@ services:
   # 后端项目
   server:
     container_name: thrive_server
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/server
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/server:dev
     hostname: thrive_server
     ports:
       - "9003:9003"
@@ -73,7 +73,7 @@ services:
 
   # 服务器
   nginx:
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/nginx
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/nginx:dev
     container_name: thrive_nginx
     hostname: thrive_nginx
     ports:

@@ -1,6 +1,10 @@
 # 设置基础镜像
 FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/openjdk:11.0-jre-buster
+# 设置环境变量，存储构建时间（北京时间）
+ENV BUILD_TIME=2025-2-5-17:55:06
 
+# 使用 LABEL 指令将构建时间设置为镜像的标签
+LABEL build_time="${BUILD_TIME}"
 # 设置工作目录
 WORKDIR /thrive
 
@@ -27,7 +31,7 @@ ENV EMAIL_USERNAME=33311118881@qq.com
 ## 邮箱授权码（xxxxxxxxxxxxx）
 ENV EMAIL_PASSWORD=xxxxxxxxxxxxx
 ENV VERSION=2.4.4
-
+RUN sed -i "s@http.*\(com\|org\|cn\)@http://mirrors.cloud.tencent.com@g" /etc/apt/sources.list.d/debian.sources
 # 将jar包复制到工作目录中并拷贝给app.jar
 ADD https://github.com/LiuYuYang01/ThriveX-Server/releases/download/2.4.4/blog.jar /thrive/server.jar
 

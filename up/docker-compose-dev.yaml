@@ -1,9 +1,9 @@
 services:
   # 数据库
   mysql:
-    container_name: mysql
+    container_name: thrive_mysql
     image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql:dev
-    hostname: mysql-thrive
+    hostname: thrive_mysql
     ports:
       - "3307:3306"
     networks:
@@ -13,7 +13,7 @@ services:
       ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)
       MYSQL_ROOT_PASSWORD: ThriveX@123?
       ## 设置数据库名,强烈建议修改(首次启动有效)
-      MYSQL_DATABASE: thrive
+      MYSQL_DATABASE: ThriveX
       ## 设置数据库用户名,强烈建议修改(首次启动有效)
       MYSQL_USER: thrive
       ## 设置数据库密码,强烈建议修改(首次启动有效)
@@ -24,9 +24,9 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
   # 前端项目
   blog:
-    container_name: blog
+    container_name: thrive_blog
     image: registry.cn-hangzhou.aliyuncs.com/thrive/blog:dev
-    hostname: blog-thrive
+    hostname: thrive_blog
     ports:
       - "9001:9001"
     networks:
@@ -34,7 +34,7 @@ services:
         ipv4_address: 10.178.178.12
     environment:
       # 设置后端接口地址,http://你的后端域名/api
-      NEXT_PUBLIC_PROJECT_API: http://server-thrive:9003/api
+      NEXT_PUBLIC_PROJECT_API: http://server_thrive:9003/api
       # 高德地图key
       NEXT_PUBLIC_GAODE_KEY_CODE: ""
       # 高德地图秘钥
@@ -44,9 +44,9 @@ services:
 
   # 控制端项目
   admin:
-    container_name: admin
+    container_name: thrive_admin
     image: registry.cn-hangzhou.aliyuncs.com/thrive/admin:dev
-    hostname: admin-thrive
+    hostname: thrive_admin
     ports:
       - "9002:80"
     networks:
@@ -54,7 +54,7 @@ services:
         ipv4_address: 10.178.178.13
     environment:
       # 设置后端接口地址,http://你的后端域名/api
-      VITE_PROJECT_API: http://server-thrive:9003/api
+      VITE_PROJECT_API: http://server_thrive:9003/api
       # 百度统计站点ID
       VITE_BAIDU_TONGJI_SITE_ID: ""
       # 百度统计秘钥
@@ -68,9 +68,9 @@ services:
 
   # 后端项目
   server:
-    container_name: server
+    container_name: thrive_server
     image: registry.cn-hangzhou.aliyuncs.com/thrive/server:dev
-    hostname: server-thrive
+    hostname: thrive_server
     ports:
       - "9003:9003"
     networks:
@@ -78,7 +78,7 @@ services:
         ipv4_address: 10.178.178.14
     environment:
       ## 设置数据库连接地址,建议默认
-      DB_INFO: 10.178.178.10:3306/thrive
+      DB_INFO: 10.178.178.10:3306/ThriveX
       ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
       DB_USERNAME: thrive
       ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
@@ -97,8 +97,8 @@ services:
   # 服务器
   nginx:
     image: registry.cn-hangzhou.aliyuncs.com/thrive/nginx:dev
-    container_name: nginx
-    hostname: nginx-thrive
+    container_name: thrive_nginx
+    hostname: thrive_nginx
     ports:
       - "9007:80"
     networks:

@@ -173,6 +173,8 @@ def install_nosql():
     show()
     # 指定docker-compose文件名用于NoSQL安装
     compose_filename = "docker-compose-nosql.yaml"
+    if args.dev:
+        compose_filename = "docker-compose-nosql-dev.yaml"
     # 下载docker-compose文件
     download_compose_file()
     # 记录安装开始日志
@@ -217,6 +219,8 @@ def install_sql():
     # set_install_info()
     show()
     compose_filename = "docker-compose-sql.yaml"
+    if args.dev:
+        compose_filename = "docker-compose-dev.yaml"
     download_compose_file()
     logger.info("开始安装SQL")
     run_command(f"cp -rf up/{compose_filename} {compose_filename}")
@@ -295,6 +299,21 @@ def main():
     else:
         print("无效选项")
         sys.exit(1)
+def pull():
+    """
+    根据不同的环境（开发或生产），拉取相应的Docker镜像版本。
+
+    本函数不接受参数，但依赖于全局变量args，其中args.dev指示是否为开发环境。
+    在开发环境下，拉取dev版本的镜像；在生产环境下，则拉取latest版本的镜像。
+    """
+    if args.dev:
+        # 在开发环境下，拉取以下服务的dev版本镜像：mysql, nginx, server, admin, blog
+        for i in ["mysql", "nginx", "server", "admin", "blog"]:
+            os.system(f"docker pull registry.cn-hangzhou.aliyuncs.com/thrive/{i}:dev")
+    else:
+        # 在非开发环境下，拉取以下服务的latest版本镜像：mysql, nginx, server, admin, blog
+        for i in ["mysql", "nginx", "server", "admin", "blog"]:
+            os.system(f"docker pull registry.cn-hangzhou.aliyuncs.com/thrive/{i}:latest")
 
 if __name__ == "__main__":
     arg = ArgumentParser(description='当前脚本版本: 1.0', prog="ThriveXInstall")
@@ -309,6 +328,7 @@ if __name__ == "__main__":
     arg.add_argument('-g', '--gitee', action='store_true', help="使用gitee下载docker-compose文件", default=False, required=False)
     arg.add_argument('-b', '--build', action='store_true', help="自行构建镜像", default=False, required=False)
     arg.add_argument('-dev', '--dev', action='store_true', help="使用开发版镜像运行", default=False, required=False)
+    arg.add_argument('-update', '--update', action='store_true', help="更新对应版本镜像", default=False, required=False)
     args = arg.parse_args()
     if args.gitee:
         url_compose_root = "https://gitee.com/liumou_site/ThriveX/raw/main"
@@ -318,9 +338,14 @@ if __name__ == "__main__":
     mysql_host=args.host
     nginx_port=args.nginx
     mysql_path=args.dir
+    if args.update:
+        pull()
+        exit(0)
     if args.sql:
         install_sql()
+        exit(0)
     else:
         install_nosql()
+        exit(0)
     # if args.build:
     #     build_image()
