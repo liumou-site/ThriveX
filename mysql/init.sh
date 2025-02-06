@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-/etc/init.d/mysql start
+mysqld
 if [[ -f /ThriveX.sql ]];then
   echo "开始导入数据库"
   # 判断是否能否使用root登录
@@ -24,3 +24,4 @@ if [[ -f /ThriveX.sql ]];then
 else
   echo "未找到ThriveX.sql文件,无需初始化数据库"
 fi
+/usr/local/bin/docker-entrypoint.sh
