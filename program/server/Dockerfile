@@ -27,7 +27,6 @@ ENV EMAIL_PORT=465
 ENV EMAIL_USERNAME=33311118881@qq.com
 ## 邮箱授权码（xxxxxxxxxxxxx）
 ENV EMAIL_PASSWORD=xxxxxxxxxxxxx
-RUN #sed -i "s@http.*\(com\|org\|cn\)@http://mirrors.cloud.tencent.com@g" /etc/apt/sources.list.d/debian.sources
 # 将jar包复制到工作目录中并拷贝给app.jar
 ADD https://github.com/LiuYuYang01/ThriveX-Server/releases/download/2.4.4/blog.jar /server/server.jar
 

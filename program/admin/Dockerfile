@@ -9,7 +9,7 @@ LABEL build_time="${BUILD_TIME}"
 RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
 
 # 克隆代码
-RUN git clone https://gitee.com/liu_yu_yang666/ThriveX-Admin.git /admin
+RUN git clone https://github.com/LiuYuYang01/Thrive-Admin /admin
 
 # 设置工作目录
 WORKDIR /admin
@@ -21,7 +21,7 @@ RUN npm config set registry https://registry.npmmirror.com
 # 安装依赖
 RUN npm install
 
-# 设置环境变量
+# 设置环境变量(必须改为自己的且外部浏览器可访问的后端地址)
 ENV VITE_PROJECT_API=http://server.thrive.site:9003/api
 ## 百度统计站点ID
 ENV VITE_BAIDU_TONGJI_SITE_ID=""

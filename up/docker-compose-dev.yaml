@@ -33,7 +33,7 @@ services:
       thrive_network:
         ipv4_address: 10.178.178.12
     environment:
-      # 设置后端接口地址(必须修改),http://你的后端域名:端口/api
+      # 设置后端接口地址(必须改为自己的且外部浏览器可访问的后端地址),http://你的后端域名:端口/api
       NEXT_PUBLIC_PROJECT_API: http://10.1.33.252:9003/api
       # 高德地图key
       NEXT_PUBLIC_GAODE_KEY_CODE: ""
@@ -54,7 +54,7 @@ services:
       thrive_network:
         ipv4_address: 10.178.178.13
     environment:
-      # 设置后端接口地址(必须修改),http://你的后端域名/api
+      # 设置后端接口地址(必须改为自己的且外部浏览器可访问的后端地址),http://你的后端域名/api
       VITE_PROJECT_API: http://10.1.33.252:9003/api
       # 百度统计站点ID
       VITE_BAIDU_TONGJI_SITE_ID: ""

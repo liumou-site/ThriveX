@@ -9,7 +9,7 @@ LABEL build_time="${BUILD_TIME}"
 RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
 
 # 克隆代码
-RUN git clone https://gitee.com/liu_yu_yang666/ThriveX-Blog.git /blog
+RUN git clone https://github.com/LiuYuYang01/ThriveX-Blog /blog
 
 # 设置工作目录
 WORKDIR /blog
@@ -39,4 +39,4 @@ RUN chmod +x /blog/init.sh
 EXPOSE 9001
 
 # 启动Next.js应用
-CMD ["./init.sh"]
+CMD ["/blog/init.sh"]
