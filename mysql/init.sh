@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
-mysqld
-if [[ -f /ThriveX.sql ]];then
+/usr/local/bin/docker-entrypoint.sh &
+if [[ -f /docker-entrypoint-initdb.d/ThriveX.sql ]];then
   echo "开始导入数据库"
   # 判断是否能否使用root登录
   mysql -u root -p$MYSQL_ROOT_PASSWORD -e "SELECT 1;" > /dev/null 2>&1
@@ -15,13 +15,12 @@ if [[ -f /ThriveX.sql ]];then
          mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO 'root'@'%';"
       fi
       mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
-      mysql -u root -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE < /ThriveX.sql
+      mysql -u root -p$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE < /docker-entrypoint-initdb.d/ThriveX.sql
       echo "数据库初始化完成"
-      rm -f /ThriveX.sql
+      rm -f /docker-entrypoint-initdb.d/ThriveX.sql
   else
       echo "无法使用root登录,请检查MYSQL_ROOT_PASSWORD"
   fi
 else
-  echo "未找到ThriveX.sql文件,无需初始化数据库"
+  echo "未找到[ /docker-entrypoint-initdb.d/ThriveX.sql ]文件,无需初始化数据库"
 fi
-/usr/local/bin/docker-entrypoint.sh

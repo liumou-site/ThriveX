@@ -35,10 +35,10 @@ MYSQL_USER=thrive # 必须执行这行,可以修改数据库用户名
 > 必须先执行上面的代码块,然后再执行下面的代码块
 
 ```shell
-docker run -tid --name thrive_mysql -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \\
--e MYSQL_DATABASE=${MYSQL_DATABASE} \\
--e MYSQL_PASSWORD=${MYSQL_PASSWORD} \\
--e MYSQL_USER=${MYSQL_USER} \\
+docker run -tid --name thrive_mysql -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
+-e MYSQL_DATABASE=${MYSQL_DATABASE} \
+-e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
+-e MYSQL_USER=${MYSQL_USER} \
 -v ${src}:/var/lib/mysql ${image}
 ```
 

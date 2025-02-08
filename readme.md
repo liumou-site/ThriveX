@@ -5,51 +5,31 @@
 
 # 依赖安装
 
-> 在进行部署前,请确保服务器已安装`docker`和`docker-compose`、`git`、`docker-compose-plugin`
+> 在进行部署前,请确保服务器已安装`git`
 
-## 配置源
-
-https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
-
-> 安装依赖之前,请先配置镜像源,否则无法安装`docker-ce`及`docker-compose-plugin`
-
-## YUM
+# 获取安装文件
 
 ```shell
-yum clean all&&yum makecache &&yum install docker-ce docker-compose git docker-compose-plugin -y
+git clone https://gitee.com/liumou_site/ThriveX
 ```
 
-## APT
+效果
 
 ```shell
-apt update && apt install docker-ce docker-compose git docker-compose-plugin -y
+root@Debian12:/data# git clone https://gitee.com/liumou_site/ThriveX
+Cloning into 'ThriveX'...
+remote: Enumerating objects: 474, done.
+remote: Counting objects: 100% (474/474), done.
+remote: Compressing objects: 100% (253/253), done.
+remote: Total 474 (delta 241), reused 432 (delta 199), pack-reused 0
+Receiving objects: 100% (474/474), 66.25 MiB | 5.24 MiB/s, done.
+Resolving deltas: 100% (241/241), done.
+root@Debian12:/data# 
 ```
-
-
-## 安装requests
-
-```shell
-pip3 install requests==2.31.0
-```
-
-> 请使用`root`用户执行以上命令
 
 # 部署教程-一键
 
 [脚本: 一键部署](doc/py.md)
-
-
-# 部署教程-手动
-
-> 基于阿里云基础镜像构建,无需配置镜像加速器
-
-## 使用外部数据库
-
-[文档: 我有自己的数据库](doc/nosql.md)
-
-## 使用全量
-
-[文档: 使用全新的数据库服务](doc/sql.md)
 
 
 ## 使用本地构建所有镜像
@@ -76,4 +56,12 @@ admin
 
 ```shell
 123456
+```
+
+# 异常处理
+
+## 安装requests
+
+```shell
+pip3 install requests==2.31.0
 ```

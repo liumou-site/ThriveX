@@ -1,0 +1,31 @@
+[mysql]
+name="ThriveX" # 数据库名称
+host="mysql.thrive.site" # 数据库主机地址,不要使用 localhost
+port=3306 # 数据库端口
+user="thrive" # 数据库用户名
+password="ThriveX@123?" # 数据库密码
+install=true # 如果为true则安装数据库,如果为false则使用已有的数据库服务器,不再进行安装
+root_password="ThriveX@123?" # 如果install为true,则需要填写root密码,否则忽略此参数
+path="/data/ThriveX/mysql" # 数据库存储路径,如果设置install为true则需要设置此参数,否则忽略此参数
+
+[email]
+host="smtp.qq.com" # 邮件服务器地址
+port=465 # 邮件服务器端口
+user="liumou.site@qq.com" # 邮箱用户名
+password="ThisIsTest" # 邮箱密码
+
+[server]
+backend="http://DomainName/api" # 设置后端服务器地址,必须 /api结尾
+
+[api]
+NEXT_PUBLIC_PROJECT_API="http://DomainName/api" # 设置前端项目的API地址
+NEXT_PUBLIC_GAODE_KEY_CODE="Value_NEXT_PUBLIC_GAODE_KEY_CODE" # 设置高德地图的key
+NEXT_PUBLIC_GAODE_SECURITYJS_CODE="Value_NEXT_PUBLIC_GAODE_SECURITYJS_CODE" # 高德地图秘钥
+VITE_GAODE_WEB_API_KEY="Value_VITE_GAODE_WEB_API_KEY" # 高德地图web api秘钥
+
+[baidu]
+VITE_BAIDU_TONGJI_SITE_ID="Value_VITE_BAIDU_TONGJI_SITE_ID" # 百度统计的site_id
+VITE_BAIDU_TONGJI_ACCESS_TOKEN="Value_VITE_BAIDU_TONGJI_ACCESS_TOKEN" # 百度统计的access_token
+
+[ai]
+VITE_AI_APIPassword="Value_VITE_AI_APIPassword" # 讯飞AI的API密码

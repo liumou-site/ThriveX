@@ -2,7 +2,7 @@ services:
   # 数据库
   mysql:
     container_name: mysql
-    image: mysql:8.0
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql
     hostname: mysql.thrive.site
     ports:
       - "3307:3306"
@@ -19,32 +19,32 @@ services:
       ## 设置数据库密码,强烈建议修改(首次启动有效)
       MYSQL_PASSWORD: ThriveX@123?
     volumes:
-      - ./mysql/mysql_data:/var/lib/mysql
-      - ./mysql/data:/docker-entrypoint-initdb.d
+      - /data/ThriveX/mysql/data:/var/lib/mysql
+      - /data/ThriveX/mysql/docker:/docker-entrypoint-initdb.d
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
   # 备份服务
-  backup:
-    image: mysql:8.0
-    container_name: mysql_backup
-    hostname: mysql_backup-thrive
-    command: /bin/sh -c "while true; do mysqldump -h mysql -u root -pliuyuyang thrive > /backup/thrive_$(date +%F_%T).sql; sleep 10800; done"
-    volumes:
-      - ./mysql/backup:/backup
-    networks:
-      thrive_network:
-        ipv4_address: 172.178.178.11
-    environment:
-      ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
-      MYSQL_ROOT_PASSWORD: ThriveX@123?
-      ## 设置数据库名,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
-      MYSQL_DATABASE: thrive
-      ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
-      MYSQL_USER: thrive
-      ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
-      MYSQL_PASSWORD: ThriveX@123?
-    depends_on:
-      - mysql
+#  backup:
+#    image: mysql:8.0
+#    container_name: mysql_backup
+#    hostname: mysql_backup-thrive
+#    command: /bin/sh -c "while true; do mysqldump -h mysql -u root -pliuyuyang thrive > /backup/thrive_$(date +%F_%T).sql; sleep 10800; done"
+#    volumes:
+#      - ./mysql/backup:/backup
+#    networks:
+#      thrive_network:
+#        ipv4_address: 172.178.178.11
+#    environment:
+#      ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
+#      MYSQL_ROOT_PASSWORD: ThriveX@123?
+#      ## 设置数据库名,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
+#      MYSQL_DATABASE: thrive
+#      ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
+#      MYSQL_USER: thrive
+#      ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库密码一致
+#      MYSQL_PASSWORD: ThriveX@123?
+#    depends_on:
+#      - mysql
 
   # 前端项目
   blog:
@@ -58,11 +58,11 @@ services:
         ipv4_address: 172.178.178.12
     environment:
       # 设置后端接口地址,http://你的后端域名/api
-      NEXT_PUBLIC_PROJECT_API: http://server-thrive:9003/api
+      NEXT_PUBLIC_PROJECT_API: "NEXT_PUBLIC_PROJECT_API_VALUE"
       # 高德地图key
-      NEXT_PUBLIC_GAODE_KEY_CODE: ""
+      NEXT_PUBLIC_GAODE_KEY_CODE: "NEXT_PUBLIC_GAODE_KEY_CODE_VALUE"
       # 高德地图秘钥
-      NEXT_PUBLIC_GAODE_SECURITYJS_CODE: ""
+      NEXT_PUBLIC_GAODE_SECURITYJS_CODE: "NEXT_PUBLIC_GAODE_SECURITYJS_CODE_VALUE"
     depends_on:
       - mysql
       - server
@@ -79,15 +79,15 @@ services:
         ipv4_address: 172.178.178.13
     environment:
       # 设置后端接口地址,http://你的后端域名/api
-      VITE_PROJECT_API: http://server-thrive:9003/api
+      VITE_PROJECT_API: VITE_PROJECT_API_VALUE
       # 百度统计站点ID
-      VITE_BAIDU_TONGJI_SITE_ID: ""
+      VITE_BAIDU_TONGJI_SITE_ID: "VITE_BAIDU_TONGJI_SITE_ID_VALUE"
       # 百度统计秘钥
-      VITE_BAIDU_TONGJI_ACCESS_TOKEN: ""
+      VITE_BAIDU_TONGJI_ACCESS_TOKEN: "VITE_BAIDU_TONGJI_ACCESS_TOKEN_VALUE"
       ## AI大模型秘钥
-      VITE_AI_APIPassword: ""
+      VITE_AI_APIPassword: "VITE_AI_APIPassword_VALUE"
       ## 高德地图坐标秘钥
-      VITE_GAODE_WEB_API: ""
+      VITE_GAODE_WEB_API: "VITE_GAODE_WEB_API_VALUE"
     depends_on:
       - mysql
       - server
@@ -95,8 +95,8 @@ services:
   # 后端项目
   server:
     container_name: server
-    build: program/server
-    hostname: server-thrive
+    build: registry.cn-hangzhou.aliyuncs.com/thrive/server
+    hostname: server.thrive.site
     ports:
       - "9003:9003"
     networks:
@@ -104,15 +104,15 @@ services:
         ipv4_address: 172.178.178.14
     environment:
       ## 设置数据库主机地址
-      DB_HOST: thrive_mysql
+      DB_INFO: DbHost:Port3306/DbNameThriveX
       ## 设置数据库名,强烈建议修改(首次启动有效)-必须和前面的数据库名一致
-      DB_NAME: thrive
+      DB_NAME: DbNameThriveX
       ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
-      DB_USERNAME: thrive
+      DB_USERNAME: DbUserThrive
       ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
-      DB_PASSWORD: ThriveX@123?
+      DB_PASSWORD: DB_PASSWORD_ThriveX@123?
       ## 设置数据库端口
-      DB_PORT: 3306
+      DB_PORT: Port3306
       ## 设置邮箱配置
       EMAIL_HOST: smtp.qq.com
       ## 设置邮箱端口
@@ -120,24 +120,23 @@ services:
       ## 设置邮箱用户名
       EMAIL_USERNAME: 123456789@qq.com
       ## 设置邮箱密码
-      EMAIL_PASSWORD: 123456789
+      EMAIL_PASSWORD: 123456789Password
     depends_on:
       - mysql
-
-  # 服务器
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    hostname: nginx.thrive.site
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    networks:
-      thrive_network:
-        ipv4_address: 172.178.178.15
-    depends_on:
-      - server
+#  # 服务器
+#  nginx:
+#    image: nginx:latest
+#    container_name: nginx
+#    hostname: nginx.thrive.site
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+#    networks:
+#      thrive_network:
+#        ipv4_address: 172.178.178.15
+#    depends_on:
+#      - server
 
 # 网络配置
 networks:
