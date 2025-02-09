@@ -8,6 +8,15 @@ LABEL build_time="${BUILD_TIME}"
 # 更新包列表并安装Git
 RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
 
+# 设置主机DNS
+RUN echo "nameserver 119.29.29.29" > /etc/resolv.conf
+RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+# 设置时区为上海
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    apk del tzdata \
+    && rm -rf /var/cache/apk/* \
+
 # 克隆代码
 RUN git clone https://gitee.com/liumou_site/ThriveX-Blog
 WORKDIR /

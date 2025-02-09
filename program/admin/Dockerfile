@@ -8,6 +8,9 @@ LABEL build_time="${BUILD_TIME}"
 # 更新包列表并安装Git
 RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
 WORKDIR /
+# 设置主机DNS
+RUN echo "nameserver 119.29.29.29" > /etc/resolv.conf
+RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 # 克隆代码
 RUN git clone https://gitee.com/liumou_site/Thrive-Admin.git
 RUN mv Thrive-Admin admin
