@@ -226,6 +226,8 @@ class BuildInstall:
 		self.db_password = None
 		# 数据库名称，初始值为None，表示尚未设置数据库名称
 		self.db_name = None
+		# 数据库路径
+		self.db_path = None
 		# 电子邮件用户名，初始值为None，表示尚未设置用于发送邮件的邮箱用户名
 		self.email_user = None
 		# 电子邮件密码，初始值为None，表示尚未设置用于发送邮件的邮箱密码
@@ -279,7 +281,11 @@ class BuildInstall:
 				self.db_name = os.getenv("THRIVEX_DB_NAME")
 			else:
 				self.db_name = get_user_input("请输入数据库名称，默认: ThriveX: ", default="ThriveX")
-
+		if not self.db_path:
+			if os.getenv("THRIVEX_DB_PATH"):
+				self.db_path = os.getenv("THRIVEX_DB_PATH")
+			else:
+				self.db_path = get_user_input("请输入数据库路径: ", default="/var/lib/mysql")
 		# 检查邮箱地址配置，优先使用环境变量配置，并进行竖线字符验证
 		if not self.email_user:
 			if os.getenv("THRIVEX_EMAIL"):
@@ -307,6 +313,9 @@ class BuildInstall:
 		print(f"数据库用户名: {self.db_user}")
 		print(f"数据库密码: {self.db_password}")
 		print(f"数据库名称: {self.db_name}")
+		if self.install_mysql:
+			print("安装数据库: 是")
+			print(f"数据库路径: {self.db_path}")
 		print("----------------邮箱配置----------------")
 		print(f"邮箱地址: {self.email_user}")
 		print(f"邮箱密码: {self.email_password}")
@@ -323,6 +332,7 @@ class BuildInstall:
 		print(f"高德地图秘钥: {self.NEXT_PUBLIC_GAODE_SECURITYJS_CODE}")
 		print("--------------------------------------------------------------")
 		input("按回车键继续,按Ctrl+C取消...\n")
+		print("正在安装,请耐心等待...")
 	def set_env(self):
 		"""
 		设置环境变量，用于配置数据库和电子邮件相关信息。
@@ -480,20 +490,10 @@ class BuildInstall:
 		Raises:
 			SystemExit: 如果构建失败或出现异常，程序将退出。
 		"""
-		try:
-			# 执行Docker Compose命令构建并启动服务
-			result = subprocess.getstatusoutput("docker compose -p thrive up -d --build")
-			# 检查命令执行结果
-			if result[0] != 0:
-				# 如果构建失败，记录错误日志并退出程序
-				logging.error(f"构建失败: {result[1]}")
-				sys.exit(1)
-			# 如果构建成功，记录成功日志
-			logging.info("构建成功")
-		except Exception as e:
-			# 捕获异常，记录错误日志并退出程序
-			logging.error(f"构建失败: {e}")
+		if os.system("docker compose -p thrive up -d --build") != 0:
+			logger.error("构建 Thrive 服务失败，请检查错误日志。")
 			sys.exit(1)
+		logger.info("Thrive 服务构建成功")
 	def analysis(self):
 		if not args.toml:
 			return
@@ -516,6 +516,7 @@ class BuildInstall:
 			self.db_user = info["mysql"]["user"]
 			self.db_password = info["mysql"]["password"]
 			self.db_name = info["mysql"]["name"]
+			self.db_path = info["mysql"]["path"]
 		except Exception as e:
 			logger.warning(f"数据库配置参数不完整,错误: {e}")
 			sys.exit(2)
@@ -624,6 +625,7 @@ class BuildInstall:
 		self.set_env()  # 设置环境变量，根据用户输入或其他逻辑配置环境
 		self.replace()  # 替换特定内容，可能是文件中的占位符或配置项
 		self.build()  # 执行构建操作，可能是编译代码或构建镜像等
+		os.system("docker ps -a")
 
 
 
@@ -707,4 +709,5 @@ if __name__ == "__main__":
 	build.email_user = args.email
 	build.email_password = args.email_password
 	build.backend = args.backend
+	build.install_mysql = args.sql
 	build.start()

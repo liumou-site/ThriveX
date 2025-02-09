@@ -9,8 +9,7 @@ LABEL VERSION=2.4.4
 # 设置工作目录
 WORKDIR /server
 # 设置主机DNS
-RUN echo "nameserver 119.29.29.29" > /etc/resolv.conf
-RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+COPY resolv.conf /etc/resolv.conf
 # 设置环境变量
 ENV PORT=9003
 ## 设置数据库名

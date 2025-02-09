@@ -15,10 +15,10 @@ user="liumou_site@qq.com" # 邮箱用户名
 password="ThisIsTest" # 邮箱密码
 
 [server]
-backend="http://DomainName/api" # 设置后端服务器地址,必须 /api结尾
+backend="http://172.25.62.186:9003/api" # 设置后端服务器地址,必须 /api结尾
 
 [api]
-NEXT_PUBLIC_PROJECT_API="http://DomainName/api" # 设置前端项目的API地址
+NEXT_PUBLIC_PROJECT_API="http://172.25.62.186:9003/api" # 设置前端项目的API地址
 NEXT_PUBLIC_GAODE_KEY_CODE="Value_NEXT_PUBLIC_GAODE_KEY_CODE" # 设置高德地图的key
 NEXT_PUBLIC_GAODE_SECURITYJS_CODE="Value_NEXT_PUBLIC_GAODE_SECURITYJS_CODE" # 高德地图秘钥
 VITE_GAODE_WEB_API_KEY="Value_VITE_GAODE_WEB_API_KEY" # 高德地图web api秘钥
