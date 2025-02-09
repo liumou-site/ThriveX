@@ -7,7 +7,6 @@ ENV BUILD_TIME=2025-2-7_09:17:29
 LABEL build_time="${BUILD_TIME}"
 # 设置工作目录
 WORKDIR /docker-entrypoint-initdb.d
-COPY ThriveX.sql .
-COPY init.sh /init.sh
-RUN chmod +x /docker-entrypoint-initdb.d/ThriveX.sql&& chmod +x /init.sh
-CMD ["/init.sh"]
+COPY ThriveX/* /ThriveX/
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /ThriveX/* /usr/local/bin/docker-entrypoint.sh

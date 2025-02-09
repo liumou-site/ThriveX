@@ -7,17 +7,9 @@ import sys
 from argparse import ArgumentParser
 import tomllib
 from shutil import copy2
-
-# 预定义变量
-mysql_path = "/data/ThriveX/mysql"
-mysql_user = "ThriveX"
-mysql_password = "ThriveX@123?"
-mysql_host = "127.0.0.1"
-mysql_port = "3306"
-
-# 功能变量
-install_set_sql = "1"
-nginx_path = "/data/ThriveX/nginx"
+#
+# # 预定义变量
+md5_list = ["ccf75bfce66732275ea962f1cfd01e94", "716a2cfa82410fc726b22293953be48e"]
 pac = "apt"
 url_compose_root = "https://github.com/liumou-site/ThriveX/blob/main"
 compose_filename = "docker-compose.yaml"
@@ -32,7 +24,16 @@ formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(filename)s:%(lineno
 handler = logging.StreamHandler(sys.stdout)
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-
+def get_md5(file_):
+    import hashlib
+    md5 = hashlib.md5()
+    with open(file_, 'rb') as f:
+        while True:
+            data = f.read(8096)
+            if not data:
+                break
+            md5.update(data)
+    return md5.hexdigest()
 def create_demo(file):
 	"""
 	创建一个示例配置文件
@@ -210,6 +211,7 @@ def install_docker():
 
 class BuildInstall:
 	def __init__(self):
+		self.db_root_password = None
 		self.VITE_AI_APIPassword = None
 		self.VITE_BAIDU_TONGJI_ACCESS_TOKEN = None
 		self.VITE_BAIDU_TONGJI_SITE_ID = None
@@ -226,13 +228,15 @@ class BuildInstall:
 		self.db_password = None
 		# 数据库名称，初始值为None，表示尚未设置数据库名称
 		self.db_name = None
-		# 数据库路径
-		self.db_path = None
 		# 电子邮件用户名，初始值为None，表示尚未设置用于发送邮件的邮箱用户名
 		self.email_user = None
 		# 电子邮件密码，初始值为None，表示尚未设置用于发送邮件的邮箱密码
 		self.email_password = None
-
+		# 路径
+		self.path_mysql = None
+		self.path_admin = None
+		self.path_blog = None
+		# 项目API
 		self.NEXT_PUBLIC_PROJECT_API = None
 		self.NEXT_PUBLIC_GAODE_KEY_CODE = None
 		self.NEXT_PUBLIC_GAODE_SECURITYJS_CODE = None
@@ -281,11 +285,11 @@ class BuildInstall:
 				self.db_name = os.getenv("THRIVEX_DB_NAME")
 			else:
 				self.db_name = get_user_input("请输入数据库名称，默认: ThriveX: ", default="ThriveX")
-		if not self.db_path:
+		if not self.path_mysql:
 			if os.getenv("THRIVEX_DB_PATH"):
-				self.db_path = os.getenv("THRIVEX_DB_PATH")
+				self.path_mysql = os.getenv("THRIVEX_DB_PATH")
 			else:
-				self.db_path = get_user_input("请输入数据库路径: ", default="/var/lib/mysql")
+				self.path_mysql = get_user_input("请输入数据库路径: ", default="/var/lib/mysql")
 		# 检查邮箱地址配置，优先使用环境变量配置，并进行竖线字符验证
 		if not self.email_user:
 			if os.getenv("THRIVEX_EMAIL"):
@@ -315,13 +319,19 @@ class BuildInstall:
 		print(f"数据库名称: {self.db_name}")
 		if self.install_mysql:
 			print("安装数据库: 是")
-			print(f"数据库路径: {self.db_path}")
+		else:
+			print("安装数据库: 否")
+		print("----------------路径配置----------------")
+		print(f"数据库映射路径: {self.path_mysql}")
+		print(f"admin映射路径: {self.path_admin}")
+		print(f"blog映射路径: {self.path_blog}")
+
 		print("----------------邮箱配置----------------")
 		print(f"邮箱地址: {self.email_user}")
 		print(f"邮箱密码: {self.email_password}")
 		print(f"邮箱端口: {self.email_port}")
 		print(f"邮箱主机: {self.email_host}")
-		print("----------------后端URL----------------")
+		print("----------------后端配置----------------")
 		print(f"后端URL: {self.backend}")
 		print("----------------其他配置----------------")
 		print(f"AI大模型秘钥: {self.VITE_AI_APIPassword}")
@@ -434,6 +444,10 @@ class BuildInstall:
 
 		# 检查源文件是否为文件且存在
 		if os.path.isfile(self.src):
+			# 检查md5校验和，确保文件完整且未被篡改
+			if get_md5(self.src) not in md5_list:
+				logger.error(f"文件校验失败，请检查文件是否完整: {self.src}")
+				# sys.exit(1)
 			try:
 				# 使用copy2函数复制文件，以保留文件的元数据（如修改时间等）
 				copy2(self.src, self.dst)
@@ -452,29 +466,47 @@ class BuildInstall:
 		本方法旨在替换文件中预定义的占位符，例如数据库主机、端口、名称、用户、密码，
 		电子邮件用户和密码，以及后端URL。这些占位符被实际的配置信息所替换。
 		"""
-		# 替换数据库主机名
+		# 数据库
+		## 替换数据库主机名
 		self.replace_in_file(r"DbHost", self.db_host)
-		# 替换数据库端口号
+		## 替换数据库端口号
 		self.replace_in_file(r"Port3306", str(self.db_port))
-		# 替换数据库名称
+		## 替换数据库名称
 		self.replace_in_file(r"DbNameThriveX", self.db_name)
-		# 替换数据库用户名
+		## 替换数据库用户名
 		self.replace_in_file(r"DbUserThrive", self.db_user)
-		# 替换数据库密码
-		self.replace_in_file(r"DB_PASSWORD_ThriveX@123\?", self.db_password)
-		# 替换电子邮件用户名
+		## 替换数据库密码
+		self.replace_in_file(r"DB_PASSWORD_ThriveX", self.db_password)
+		## 数据库root密码
+		self.replace_in_file(r"DB_ROOT_PASSWORD_ThriveX", self.db_root_password)
+
+		# 电子邮件
+		## 替换电子邮件用户名
 		self.replace_in_file(r"123456789@qq.com", self.email_user)
-		# 替换电子邮件密码
+		## 替换电子邮件密码
 		self.replace_in_file(r"123456789Password", self.email_password)
+
+
 		# 替换后端URL
-		self.replace_in_file(r"BackendUrl", f"http://{self.db_host}:3000")
+		self.replace_in_file(r"VITE_PROJECT_API_VALUE", self.backend)
+		self.replace_in_file(r"NEXT_PUBLIC_PROJECT_API_VALUE", self.backend)
+
+
+		# 替换路径
+		## 替换博客
+		self.replace_in_file(r"/data/ThriveX/blog", self.path_blog)
+		## 替换admin
+		self.replace_in_file(r"/data/ThriveX/admin", self.path_admin)
+		## 替换mysql
+		self.replace_in_file(r"/data/ThriveX/mysql", self.path_mysql)
+
+
 		# 替换 api参数
 		## baidu
 		self.replace_in_file(r"VITE_BAIDU_TONGJI_SITE_ID_VALUE", self.VITE_BAIDU_TONGJI_SITE_ID)
 		self.replace_in_file(r"VITE_BAIDU_TONGJI_ACCESS_TOKEN_VALUE", self.VITE_BAIDU_TONGJI_ACCESS_TOKEN)
 		## 替换后端 api接口地址
-		self.replace_in_file(r"VITE_PROJECT_API_VALUE", self.backend)
-		self.replace_in_file(r"NEXT_PUBLIC_PROJECT_API_VALUE", self.backend)
+
 		## gaode
 		self.replace_in_file(r"NEXT_PUBLIC_GAODE_KEY_CODE_VALUE", self.NEXT_PUBLIC_GAODE_KEY_CODE)
 		self.replace_in_file(r"NEXT_PUBLIC_GAODE_SECURITYJS_CODE_VALUE", self.NEXT_PUBLIC_GAODE_SECURITYJS_CODE)
@@ -495,31 +527,58 @@ class BuildInstall:
 			sys.exit(1)
 		logger.info("Thrive 服务构建成功")
 	def analysis(self):
+		"""
+		分析配置文件并初始化相关参数。
+		本函数首先检查配置文件是否存在，然后验证其格式，最后读取并设置必要的配置参数。
+		如果配置文件不存在或格式不正确，将记录警告并退出程序。
+		"""
+		# 检查是否提供了配置文件路径
 		if not args.toml:
 			return
+		# 检查配置文件是否存在
 		if not os.path.isfile(args.toml):
 			logger.warning(f"文件不存在: {args.toml}")
 			create_demo(args.toml)
 			sys.exit(1)
+		# 检查配置文件是否为toml格式
 		if not args.toml.endswith(".toml"):
 			logger.warning(f"请输入正确的toml文件: {args.toml}")
 			sys.exit(1)
+		# 读取配置文件内容
 		info = read_toml(args.toml)
+		# 配置文件应包含的节列表
 		sec_list = ["mysql", "email", "server", "api", "baidu", "ai"]
+		# 检查配置文件是否包含所有必要的节
 		for sec in sec_list:
 			if not info[sec]:
 				logger.warning(f"找不到配置项，请检查配置文件: {sec}")
 				sys.exit(1)
+		# 尝试从配置文件中提取数据库配置参数
 		try:
 			self.db_host = info["mysql"]["host"]
 			self.db_port = info["mysql"]["port"]
 			self.db_user = info["mysql"]["user"]
 			self.db_password = info["mysql"]["password"]
 			self.db_name = info["mysql"]["name"]
-			self.db_path = info["mysql"]["path"]
+			self.db_root_password = info["mysql"]["root_password"]
 		except Exception as e:
 			logger.warning(f"数据库配置参数不完整,错误: {e}")
 			sys.exit(2)
+		# 路径配置
+		try:
+			p = info["path"]
+			if p["def"]:
+				self.path_mysql = p["mysql"]
+				self.path_admin = p["admin"]
+				self.path_blog = p["blog"]
+			else:
+				self.path_mysql = os.path.join(p["root"], "mysql")
+				self.path_admin = os.path.join(p["root"], "admin")
+				self.path_blog = os.path.join(p["root"], "blog")
+		except Exception as e:
+			logger.warning(f"路径配置参数不完整,错误: {e}")
+			sys.exit(2)
+		# 尝试从配置文件中提取邮件配置参数
 		try:
 			self.email_user = info["email"]["user"]
 			self.email_password = info["email"]["password"]
@@ -528,12 +587,13 @@ class BuildInstall:
 		except Exception as e:
 			logger.warning(f"邮件配置参数不完整,错误: {e}")
 			sys.exit(2)
+		# 尝试从配置文件中提取后端服务器配置参数
 		try:
 			self.backend = info["server"]["backend"]
 		except Exception as e:
 			logger.warning(f"后端[ server ]配置参数不完整,错误: {e}")
 			sys.exit(2)
-		# 获取api
+		# 获取api配置
 		try:
 			self.VITE_GAODE_WEB_API_KEY = info["api"]["VITE_GAODE_WEB_API_KEY"]
 			self.NEXT_PUBLIC_GAODE_KEY_CODE = info["api"]["NEXT_PUBLIC_GAODE_KEY_CODE"]
@@ -542,14 +602,14 @@ class BuildInstall:
 		except Exception as e:
 			logger.warning(f"[ api ]配置参数不完整,错误: {e}")
 			sys.exit(2)
-		# 获取baidu
+		# 获取baidu配置
 		try:
 			self.VITE_BAIDU_TONGJI_SITE_ID = info["baidu"]["VITE_BAIDU_TONGJI_SITE_ID"]
 			self.VITE_BAIDU_TONGJI_ACCESS_TOKEN = info["baidu"]["VITE_BAIDU_TONGJI_ACCESS_TOKEN"]
 		except Exception as e:
 			logger.warning(f"[ baidu ]配置参数不完整,错误: {e}")
 			sys.exit(2)
-		# 获取ai
+		# 获取ai配置
 		try:
 			self.VITE_AI_APIPassword = info["ai"]["VITE_AI_APIPassword"]
 		except Exception as e:
@@ -608,18 +668,29 @@ class BuildInstall:
 		if not os.path.isfile(admin):
 			logger.error(f"文件不存在: {admin}")
 			sys.exit(1)
-
+	def images_get(self):
+		name = "moby/buildkit"
+		images = os.popen(f"docker images | grep {name}").read()
+		if not images:
+			logger.info(f"拉取镜像: {name}")
+			if os.system(f"docker pull registry.cn-hangzhou.aliyuncs.com/liuyi778/buildkit") != 0:
+				logger.error(f"拉取镜像失败: {name}")
+				sys.exit(1)
+			os.system(f"docker tag registry.cn-hangzhou.aliyuncs.com/liuyi778/buildkit {name}")
+		else:
+			logger.info(f"镜像已存在: {name}")
 	def start(self):
 		"""
 		启动程序，执行一系列初始化和配置步骤。
 		本函数按顺序执行多个步骤，包括获取Docker状态、复制文件或目录、获取用户输入、
 		显示信息、设置环境变量、替换特定内容，最后进行构建。
 		"""
+		self.images_get() # 拉取镜像
 		self.path_check() # 检查文件是否存在
 		self.analysis()  # 解析配置文件
 		self.get_docker_status()  # 获取Docker状态，确保Docker环境正常运行
 		self.copy()  # 复制必要的文件或目录，准备环境
-		self.get_user_input()  # 获取用户输入，可能用于配置或后续操作
+		# self.get_user_input()  # 获取用户输入，可能用于配置或后续操作
 		self.check_args() # 检查参数合法性，确保输入的参数符合要求
 		self.show()  # 显示相关信息，可能是环境信息或用户输入的确认信息
 		self.set_env()  # 设置环境变量，根据用户输入或其他逻辑配置环境
@@ -659,9 +730,10 @@ def clean():
 
 
 if __name__ == "__main__":
+	src="/data/ThriveX/"
 	arg = ArgumentParser(description='当前脚本版本: 1.0', prog="ThriveXInstall")
-	h = f"指定数据库映射路径,默认: {mysql_path}l"
-	arg.add_argument('-d', '--dir', type=str, help=h, default=mysql_path, required=False)
+	h = f"指定数据映射路径,默认: {src}l"
+	arg.add_argument('-d', '--dir', type=str, help=h, default=src, required=False)
 	# 数据库信息
 	arg.add_argument('-p', '--port', type=int, help="指定数据库端口,默认: 3306", default=3306, required=False)
 	arg.add_argument('-u', '--user', type=str, help="指定数据库用户名,默认: ThriveX", default="ThriveX", required=False)

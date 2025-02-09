@@ -1,5 +1,5 @@
 # 使用官方的Node.js镜像作为基础镜像
-FROM registry.cn-hangzhou.aliyuncs.com/liuyi778/node-20-alpine AS builder
+FROM registry.cn-hangzhou.aliyuncs.com/thrive/admin AS builder
 # 设置环境变量，存储构建时间（北京时间）
 ENV BUILD_TIME=2025-2-6_18:05:23
 

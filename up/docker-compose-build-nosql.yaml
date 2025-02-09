@@ -18,7 +18,8 @@ services:
       NEXT_PUBLIC_GAODE_SECURITYJS_CODE: "NEXT_PUBLIC_GAODE_SECURITYJS_CODE_VALUE"
     depends_on:
       - server
-
+    volumes:
+      - /data/ThriveX/blog:/blog
   # 控制端项目
   admin:
     container_name: admin
@@ -42,7 +43,8 @@ services:
       VITE_GAODE_WEB_API: "VITE_GAODE_WEB_API_VALUE"
     depends_on:
       - server
-
+    volumes:
+      - /data/ThriveX/admin:/admin
   # 后端项目
   server:
     container_name: server
@@ -61,7 +63,7 @@ services:
       ## 设置数据库用户名,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
       DB_USERNAME: DbUserThrive
       ## 设置数据库密码,强烈建议修改(首次启动有效)-必须和前面的数据库用户名一致
-      DB_PASSWORD: DB_PASSWORD_ThriveX@123?
+      DB_PASSWORD: DB_PASSWORD_ThriveX
       ## 设置数据库端口
       DB_PORT: Port3306
       ## 设置邮箱配置

@@ -2,7 +2,8 @@ services:
   # 数据库
   mysql:
     container_name: mysql
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql
+#    image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql:dev
+    build: mysql
     hostname: mysql.thrive.site
     ports:
       - "3307:3306"
@@ -11,17 +12,21 @@ services:
         ipv4_address: 172.178.178.10
     environment:
       ## 设置数据库ROOT密码,强烈建议修改(首次启动有效)
-      MYSQL_ROOT_PASSWORD: ThriveX@123?
+      MYSQL_ROOT_PASSWORD: DB_ROOT_PASSWORD_ThriveX
       ## 设置数据库名,强烈建议修改(首次启动有效)
-      MYSQL_DATABASE: thrive
+      MYSQL_DATABASE: DbNameThriveX
       ## 设置数据库用户名,强烈建议修改(首次启动有效)
-      MYSQL_USER: thrive
+      MYSQL_USER: DbUserThrive
       ## 设置数据库密码,强烈建议修改(首次启动有效)
-      MYSQL_PASSWORD: ThriveX@123?
+      MYSQL_PASSWORD: DB_PASSWORD_ThriveX
     volumes:
       - /data/ThriveX/mysql/data:/var/lib/mysql
       - /data/ThriveX/mysql/docker:/docker-entrypoint-initdb.d
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+#    command: /bin/sh -c "/ThriveX/init.sh"
 
   # 备份服务
 #  backup:
@@ -64,8 +69,12 @@ services:
       # 高德地图秘钥
       NEXT_PUBLIC_GAODE_SECURITYJS_CODE: "NEXT_PUBLIC_GAODE_SECURITYJS_CODE_VALUE"
     depends_on:
-      - mysql
-      - server
+      mysql:
+        condition: service_healthy
+      server:
+        condition: service_started
+    volumes:
+      - /data/ThriveX/blog:/blog
 
   # 控制端项目
   admin:
@@ -79,7 +88,7 @@ services:
         ipv4_address: 172.178.178.13
     environment:
       # 设置后端接口地址,http://你的后端域名/api
-      VITE_PROJECT_API: VITE_PROJECT_API_VALUE
+      VITE_PROJECT_API: "VITE_PROJECT_API_VALUE"
       # 百度统计站点ID
       VITE_BAIDU_TONGJI_SITE_ID: "VITE_BAIDU_TONGJI_SITE_ID_VALUE"
       # 百度统计秘钥
@@ -89,13 +98,17 @@ services:
       ## 高德地图坐标秘钥
       VITE_GAODE_WEB_API: "VITE_GAODE_WEB_API_VALUE"
     depends_on:
-      - mysql
-      - server
-
+      mysql:
+        condition: service_healthy
+      server:
+        condition: service_started
+    volumes:
+      - /data/ThriveX/admin:/admin
   # 后端项目
   server:
     container_name: server
     image: registry.cn-hangzhou.aliyuncs.com/thrive/server
+#    build: program/server
     hostname: server.thrive.site
     ports:
       - "9003:9003"
@@ -122,7 +135,8 @@ services:
       ## 设置邮箱密码
       EMAIL_PASSWORD: 123456789Password
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 #  # 服务器
 #  nginx:
 #    image: nginx:latest

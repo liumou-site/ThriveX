@@ -6,7 +6,13 @@ user="thrive" # 数据库用户名
 password="ThriveX@123?" # 数据库密码
 install=true # 如果为true则安装数据库,如果为false则使用已有的数据库服务器,不再进行安装
 root_password="ThriveX@123?" # 如果install为true,则需要填写root密码,否则忽略此参数
-path="/data/ThriveX/mysql" # 数据库存储路径,如果设置install为true则需要设置此参数,否则忽略此参数
+
+[path]
+root="/data/ThriveX" # 数据存储路径根目录,不要使用相对路径
+mysql="/data/ThriveX/mysql" # 使用自定义的mysql路径
+blog="/data/ThriveX/blog" # 使用自定义的blog路径
+admin="/data/ThriveX/admin" # 使用自定义的admin路径
+def=false # 如果为true则使用自定义的路径,否则使用root路径+服务,例如：/data/ThriveX/ + blog,建议使用false
 
 [email]
 host="smtp.qq.com" # 邮件服务器地址
