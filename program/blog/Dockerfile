@@ -9,7 +9,9 @@ LABEL build_time="${BUILD_TIME}"
 RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
 
 # 克隆代码
-RUN git clone https://github.com/LiuYuYang01/ThriveX-Blog /blog
+RUN git clone https://gitee.com/liumou_site/ThriveX-Blog
+WORKDIR /
+RUN mv ThriveX-Blog blog
 
 # 设置工作目录
 WORKDIR /blog

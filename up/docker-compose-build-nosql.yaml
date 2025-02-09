@@ -46,7 +46,7 @@ services:
   # 后端项目
   server:
     container_name: server
-    build: registry.cn-hangzhou.aliyuncs.com/thrive/server
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/server
     hostname: server.thrive.site
     ports:
       - "9003:9003"

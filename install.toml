@@ -11,7 +11,7 @@ path="/data/ThriveX/mysql" # 数据库存储路径,如果设置install为true则
 [email]
 host="smtp.qq.com" # 邮件服务器地址
 port=465 # 邮件服务器端口
-user="liumou.site@qq.com" # 邮箱用户名
+user="liumou_site@qq.com" # 邮箱用户名
 password="ThisIsTest" # 邮箱密码
 
 [server]

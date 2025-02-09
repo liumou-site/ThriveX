@@ -7,10 +7,10 @@ ENV BUILD_TIME=2025-2-6_18:05:23
 LABEL build_time="${BUILD_TIME}"
 # 更新包列表并安装Git
 RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories&&apk update&&apk add --no-cache git
-
+WORKDIR /
 # 克隆代码
-RUN git clone https://github.com/LiuYuYang01/Thrive-Admin /admin
-
+RUN git clone https://gitee.com/liumou_site/Thrive-Admin.git
+RUN mv Thrive-Admin admin
 # 设置工作目录
 WORKDIR /admin
 
