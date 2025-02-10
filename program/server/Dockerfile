@@ -31,7 +31,7 @@ ENV EMAIL_PASSWORD=xxxxxxxxxxxxx
 # 将jar包复制到工作目录中并拷贝给app.jar
 ADD https://github.com/LiuYuYang01/ThriveX-Server/releases/download/2.4.4/blog.jar /server/server.jar
 COPY init.sh /server/init.sh
-RUN chmod +x /server/init.sh
+RUN chmod 0777 /server/init.sh
 
 # 创建容器成功做的事情,等价于：java -jar app.jar
 ENTRYPOINT ["/server/init.sh"]
