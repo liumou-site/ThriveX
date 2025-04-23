@@ -2,7 +2,7 @@ services:
   # 数据库
   mysql:
     container_name: thrive_mysql
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql
+    image: registry.cn-hangzhou.aliyuncs.com/liuyi778/mysql:8.0
     hostname: mysql.thrive.site
     ports:
       - "3307:3306"

@@ -2,7 +2,7 @@ services:
   # 数据库
   mysql:
     container_name: thrive_mysql
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/mysql:dev
+    image: registry.cn-hangzhou.aliyuncs.com/liuyi778/mysql:8.0
     hostname: mysql.thrive.site
     ports:
       - "3307:3306"
@@ -42,7 +42,8 @@ services:
     depends_on:
       - server
     volumes:
-      - /data/ThriveX/blog:/blog
+      # 需要自行修改本机的  /data/ThriveX/blog/.env 文件内容
+      - /data/ThriveX/blog/.env:/thrive/blog/.env
   # 控制端项目
   admin:
     container_name: thrive_admin
@@ -67,12 +68,13 @@ services:
     depends_on:
       - server
     volumes:
-      - /data/ThriveX/admin:/admin
+      # 需要自行修改本机的  /data/ThriveX/admin/.env 文件内容
+      - /data/ThriveX/admin/.env:/thrive/admin/.env
 
   # 后端项目
   server:
     container_name: thrive_server
-    image: registry.cn-hangzhou.aliyuncs.com/thrive/server:dev
+    image: registry.cn-hangzhou.aliyuncs.com/thrive/server:latest
     hostname: server.thrive.site
     ports:
       - "9003:9003"
@@ -97,18 +99,6 @@ services:
       ## 设置邮箱密码
       EMAIL_PASSWORD: 123456789
 
-#  # 服务器
-#  nginx:
-#    image: registry.cn-hangzhou.aliyuncs.com/thrive/nginx:dev
-#    container_name: thrive_nginx
-#    hostname: nginx.thrive.site
-#    ports:
-#      - "9007:80"
-#    networks:
-#      thrive_network:
-#        ipv4_address: 10.178.178.15
-#    depends_on:
-#      - server
 
 # 网络配置
 networks:
